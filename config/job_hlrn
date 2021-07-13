@@ -1,0 +1,62 @@
+#!/bin/bash
+#SBATCH --job-name=f2.1rArc
+#SBATCH --partition=standard96
+#SBATCH --ntasks=2304
+#SBATCH --time=05:00:00
+#SBATCH -o slurm-out.out
+#SBATCH -e slurm-err.out
+#SBATCH --account=hbk00083
+module purge
+module load slurm
+module load HLRNenv
+module load sw.skl
+module load cmake
+module load cdo nco
+module load intel/19.0.5
+module unload impi
+module load impi/2019.5
+#module load intel.compiler intel.mpi netcdf/4.4.0_intel
+#module load centoslibs
+
+set -x
+
+ulimit -s unlimited
+
+# determine JOBID
+JOBID=`echo $SLURM_JOB_ID |cut -d"." -f1`
+
+#ln -s ../bin/fesom.x .           # cp -n ../bin/fesom.x
+#cp -n ../config/namelist.config  .
+#cp -n ../config/namelist.forcing .
+#cp -n ../config/namelist.oce     .
+#cp -n ../config/namelist.ice     .
+#cp -n ../config/namelist.io     .
+
+date
+srun --mpi=pmi2 ./fesom.x > "fesom2.0.out"
+date
+
+# qstat -f $PBS_JOBID
+
+#export EXITSTATUS=$?
+#if [ ${EXITSTATUS} -eq 0 ] || [ ${EXITSTATUS} -eq 127 ] ; then
+#sbatch job.ll_ollie
+#fi#
+#exit
+
+# exit after 2017
+
+#Resultpath='/work/ollie/ogurses/output_f2r2/jra55/const_co2/'
+#test -e $Resultpath/fesom.2019.oce.restart.nc && exit
+
+#IsInFile=$( tail -1 fesom2.0.out | grep -c should)
+#if (( IsInFile > 0 )); then
+ # submit next #job                                                                                                                                                                                            
+# echo "submitting next job"
+# cp fesom2.0.out fesom.out.done 
+# sbatch job_ollie
+#else
+# echo "something is wrong, last line of fesom.out reads"
+# echo $( tail -1 fesom2.0.out)
+# echo "abnormal termination of job script"
+#fi
