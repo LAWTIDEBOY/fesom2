@@ -139,7 +139,7 @@ MODULE g_sbf
    integer, save :: nm_nc_iyear = 1850    ! initial year of time axis in netCDF (1948 like CoastDat,1800 NCEP)
    integer, save :: nm_nc_imm   = 1       ! initial month of time axis in netCDF
    integer, save :: nm_nc_idd   = 1       ! initial day of time axis in netCDF
-   real,    save :: nm_nc_freq  = 86400.0 ! time units coef (86400 CoastDat, 24 NCEP)
+   real,    save :: nm_nc_freq  = 28800.0 ! time units coef (86400 CoastDat, 24 NCEP)
    integer, save :: nm_nc_tmid  = 1       ! 1 if the time stamps are given at the mid points of the netcdf file, 0 otherwise!
    logical, save :: y_perpetual=.false.
 
