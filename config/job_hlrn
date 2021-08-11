@@ -2,19 +2,23 @@
 #SBATCH --job-name=f2.1rArc
 #SBATCH --partition=standard96
 #SBATCH --ntasks=2304
-#SBATCH --time=05:00:00
+#SBATCH --time=11:00:00
+#SBATCH --ntasks-per-node=96
 #SBATCH -o slurm-out.out
 #SBATCH -e slurm-err.out
 #SBATCH --account=hbk00083
+
 module purge
 module load slurm
 module load HLRNenv
 module load sw.skl
 module load cmake
 module load cdo nco
-module load intel/19.0.5
-module unload impi
-module load impi/2019.5
+#module load intel/19.0.5
+#module load impi/2019.5
+module load intel/18.0.6
+module load impi/2018.5
+export PSM2_MULTI_EP=0
 #module load intel.compiler intel.mpi netcdf/4.4.0_intel
 #module load centoslibs
 
@@ -46,7 +50,7 @@ date
 
 # exit after 2017
 
-#Resultpath='/work/ollie/ogurses/output_f2r2/jra55/const_co2/'
+#Resultpath='/scratch/usr/hbkoziel/model_outputs/'
 #test -e $Resultpath/fesom.2019.oce.restart.nc && exit
 
 #IsInFile=$( tail -1 fesom2.0.out | grep -c should)
