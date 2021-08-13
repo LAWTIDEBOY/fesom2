@@ -48,7 +48,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     real(kind=8)                                            :: recip_hetN_plus      !< MB's addition to heterotrophic respiration
     real(kind=8)                                            :: recip_res_het        !< [day] Reciprocal of respiration by heterotrophs and mortality (loss to detritus)
 
-    integer                                                 :: k,step,ii, idiags,n, aux
+    integer                                                 :: k,step,ii, idiags,n, aux, i
     real(kind=8)                                            :: & 
         DIN,     & !< Dissolved Inorganic Nitrogen 				[mmol/m3] 
         DIC,     & !< Dissolved Inorganic Carbon				[mmol/m3]
