@@ -297,11 +297,20 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         PARave = max(tiny,SurfSR)
         PAR(k) = PARave
         chl_upper = (PhyChl + DiaChl)
+        doc_upper = EOC
     else    
         chl_lower = PhyChl + DiaChl
+        doc_lower = EOC
         Chlave    = (chl_upper+chl_lower)*0.5d0
+        Docave    = (doc_upper+doc_lower)*0.5d0
+        a_cdom_443   = (Docave * Axcdom)**Excdom ! See relation in Matsuoka et al. 2017
+	    do i  =1,61
+	       lambda = 400d0 + (i-1d0) * 5d0
+           a_cdom     = a_cdom + a_cdom_443 * exp(-1*Scdom*(lambda - 440d0)) ! convert spectral a_cdom at 443nm to a scalar between 400-700nm every 5nm
+	    end do
+        a_cdom = a_cdom / 61d0  ! take the spectral average
 
-        kappar         =  k_w + a_chl * (Chlave)
+        kappar         =  k_w + a_chl * (Chlave) + a_cdom
         kappastar      =  kappar / cosAI(n)
         kdzLower       =  kdzUpper + kappastar * thick(k-1)
         Lowerlight     =  SurfSR * exp(-kdzLower)
@@ -309,6 +318,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         PARave         =  Lowerlight
         PAR(k)         =  PARave
         chl_upper      =  chl_lower
+        doc_upper      =  doc_lower
         kdzUpper       =  kdzLower
     end if
 
