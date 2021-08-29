@@ -113,6 +113,7 @@ MODULE g_sbf
    logical        :: ic_cyclic=.true.
   !============== namelistatmdata variables ================
    integer, save  :: nm_sbc       = 1        ! data  1= constant, 2=from file
+   ! path for repeated decade: '/scratch/usr/hbkoziel/forcing/historical_spinup/echam6_echam_'
    character(len=256), save   :: nm_xwind_file = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with winds/stress, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
    character(len=256), save   :: nm_ywind_file = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with winds/stress, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
    character(len=256), save   :: nm_humi_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with humidity,  if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
@@ -140,7 +141,7 @@ MODULE g_sbf
    integer, save :: nm_nc_imm   = 1       ! initial month of time axis in netCDF
    integer, save :: nm_nc_idd   = 1       ! initial day of time axis in netCDF
    real,    save :: nm_nc_freq  = 1.0 ! time units coef (86400 CoastDat, 24 NCEP)
-   integer, save :: nm_nc_tmid  = 1       ! 1 if the time stamps are given at the mid points of the netcdf file, 0 otherwise!
+   integer, save :: nm_nc_tmid  = 0       ! 1 if the time stamps are given at the mid points of the netcdf file, 0 otherwise!
    logical, save :: y_perpetual=.false.
 
    integer,save            :: warn       ! warning switch node/element coordinate out of forcing bounds
