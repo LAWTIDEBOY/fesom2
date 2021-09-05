@@ -1,10 +1,10 @@
 &diag_list
 ldiag_solver     =.false.
 lcurt_stress_surf=.false.
-ldiag_curl_vel3  =.false.
+ldiag_curl_vel3  =.true.
 ldiag_energy     =.false.
 ldiag_salt3D     =.false.
-ldiag_dMOC       =.true.
+ldiag_dMOC       =.false.
 ldiag_DVD        =.false.
 ldiag_forc       =.false.
 /
@@ -19,9 +19,7 @@ io_listsize=100 !number of streams to allocate. shallbe large or equal to the nu
 ! 'otracers' - all other tracers if applicable
 ! for 'dMOC' to work ldiag_dMOC must be .true. otherwise no output
 &nml_list
-io_list =  'sst       ',1, 'm', 4,
-           'sss       ',1, 'm', 4,
-    	   'ssh       ',1, 'm', 4,
+io_list =  'ssh       ',1, 'm', 4,
            'vve_5     ',1, 'm', 4,
            'uice      ',1, 'm', 4,
            'vice      ',1, 'm', 4,
@@ -42,20 +40,20 @@ io_list =  'sst       ',1, 'm', 4,
            'tx_sur    ',1, 'm', 4,
            'ty_sur    ',1, 'm', 4,
            'curl_surf ',1, 'm', 4,
+           'curl_u    ',1, 'm', 4,
            'fer_C     ',1, 'm', 4,
-           'temp      ',1, 'y', 4,
-           'salt      ',1, 'y', 8,
+           'temp      ',1, 'm', 4,
+           'salt      ',1, 'm', 8,
            'otracers  ',1, 'm', 4,
-           'N2        ',1, 'y', 4,
-           'Kv        ',1, 'y', 4,
-           'u         ',1, 'y', 4,
-           'v         ',1, 'y', 4,
-           'w         ',1, 'y', 4,
-           'Av        ',1, 'y', 4,
-           'bolus_u   ',1, 'y', 4,
-           'bolus_v   ',1, 'y', 4,
-           'bolus_w   ',1, 'y', 4,
-           'dMOC      ',1, 'y', 4,
+           'N2        ',1, 'm', 4,
+           'Kv        ',1, 'm', 4,
+           'u         ',1, 'm', 4,
+           'v         ',1, 'm', 4,
+           'w         ',1, 'm', 4,
+           'Av        ',1, 'm', 4,
+           'bolus_u   ',1, 'm', 4,
+           'bolus_v   ',1, 'm', 4,
+           'bolus_w   ',1, 'm', 4,
            'dpCO2s    ',1, 'm', 4,
            'pCO2s     ',1, 'm', 4,
            'CO2f      ',1, 'm', 4,
