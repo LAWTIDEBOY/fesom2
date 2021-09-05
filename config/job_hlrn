@@ -1,26 +1,25 @@
 #!/bin/bash
-#SBATCH --job-name=f2.1rArc
+#SBATCH --job-name=SPIN1
 #SBATCH --partition=standard96
-#SBATCH --ntasks=2304
-#SBATCH --time=11:00:00
+#SBATCH --ntasks=2304      ######2304
 #SBATCH --ntasks-per-node=96
+#SBATCH --time=11:00:00
 #SBATCH -o slurm-out.out
 #SBATCH -e slurm-err.out
-#SBATCH --account=hbk00083
+#SBATCH --account=hbk00083 
 
+## modules HLRN
 module purge
 module load slurm
 module load HLRNenv
 module load sw.skl
 module load cmake
-module load cdo nco
+module load cdo nco 
 #module load intel/19.0.5
 #module load impi/2019.5
 module load intel/18.0.6
 module load impi/2018.5
 export PSM2_MULTI_EP=0
-#module load intel.compiler intel.mpi netcdf/4.4.0_intel
-#module load centoslibs
 
 set -x
 
@@ -50,17 +49,17 @@ date
 
 # exit after 2017
 
-#Resultpath='/scratch/usr/hbkoziel/model_outputs/'
-#test -e $Resultpath/fesom.2019.oce.restart.nc && exit
+Resultpath='/scratch/projects/hbk00083/model_outputs/fesom2.1_recom/SPINUP_1'
+test -e $Resultpath/fesom.1949.oce.restart.nc && exit
 
-#IsInFile=$( tail -1 fesom2.0.out | grep -c should)
-#if (( IsInFile > 0 )); then
+IsInFile=$( tail -1 fesom2.0.out | grep -c should)
+if (( IsInFile > 0 )); then
  # submit next #job                                                                                                                                                                                            
-# echo "submitting next job"
-# cp fesom2.0.out fesom.out.done 
-# sbatch job_ollie
-#else
-# echo "something is wrong, last line of fesom.out reads"
-# echo $( tail -1 fesom2.0.out)
-# echo "abnormal termination of job script"
-#fi
+ echo "submitting next job"
+ cp fesom2.0.out fesom.out.done 
+ sbatch job_hlrn
+else
+ echo "something is wrong, last line of fesom.out reads"
+ echo $( tail -1 fesom2.0.out)
+ echo "abnormal termination of job script"
+fi
