@@ -10,7 +10,7 @@ recom_logfile_outfreq = 2700       !in recom logfile info. output frequency, # s
 
 &pavariables
 use_REcoM             =.true.
-REcoM_restart         =.false.
+REcoM_restart         =.true.
 recom_binary_write    =.false.      ! Determines if tracervalue snapshots are saved. For fine grids it may crash the model to set this to true
 
 recom_binary_init     = .false.     ! Restart from binary
@@ -32,7 +32,7 @@ het_resp_noredfield   = .true.    ! Decides respiratation of copepod group
 diatom_mucus          = .true.    ! Decides nutrient limitation effect on aggregation
 Graz_pref_new         = .true.    ! If it is true Fasham 1990, if not recom original variable preference
 Diags                 = .true.
-constant_CO2          = .true.
+constant_CO2          = .false.
 UseFeDust             = .true.      ! Turns dust input of iron off when set to.false.
 UseDustClim           = .true.
 UseDustClimAlbani     = .true.     ! Use Albani dustclim field (If it is false Mahowald will be used)
@@ -41,12 +41,12 @@ use_photodamage       = .true.      ! use Alvarez et al (2018) for chlorophyll d
 HetRespFlux_plus      = .true.      !MB More stable computation of zooplankton respiration fluxes adding a small number to HetN
 REcoMDataPath         = '/scratch/usr/hbkoziel/input/mesh_fArc/'
 restore_alkalinity    = .true.
-useRivers             = .true.
+useRivers             = .false.
 useErosion            = .false.
 NitrogenSS            = .false.     ! When set to true, external sources and sinks of nitrogen are activated (Riverine, aeolian and denitrification)
 useAeolianN           = .false.      ! When set to true, aeolian nitrogen deposition is activated
-firstyearoffesomcycle = 1800        ! The first year of the actual physical forcing (e.g. JRA-55) used
-lastyearoffesomcycle  = 1957        ! Last year of the actual physical forcing used
+firstyearoffesomcycle = 1900        ! The first year of the actual physical forcing (e.g. JRA-55) used
+lastyearoffesomcycle  = 1949        ! Last year of the actual physical forcing used
 numofCO2cycles        = 1           ! Number of cycles of the forcing planned 
 currentCO2cycle       = 1           ! Which CO2 cycle we are currently running
 DIC_PI                = .true.
@@ -70,7 +70,7 @@ cZoo2N                = 0.2d0
 recom_Tref            = 288.15d0    ! [K]
 C2K                   = 273.15d0    ! Conversion from degrees C to K
 Ae                    = 4500.d0     ! [K] Slope of the linear part of the Arrhenius function
-reminSi               = 0.02d0
+reminSi               = 0.15d0
 /
 
 &palimiter_function
@@ -172,7 +172,7 @@ agg_PP                = 0.015d0     ! [m3/(mmol N * day)] Maximum aggregation lo
 /
 
 &padin_rho_N
-rho_N                 = 0.11d0      ! [1/day] Temperature dependent N degradation of extracellular organic N (EON) (Remineralization of DON)
+rho_N                 = 0.25d0      ! [1/day] Temperature dependent N degradation of extracellular organic N (EON) (Remineralization of DON)
 /
 
 &padic_rho_C1
@@ -197,11 +197,11 @@ deg_Chl_d             = 0.2d0 !0.15d0
 &padetritus_N
 grazEff               = 0.4d0       ! [] Grazing efficiency (fraction of grazing flux into zooplankton pool) 
 grazEff2              = 0.8d0         ! [] Grazing efficiency (fraction of grazing flux into second zooplankton pool)
-reminN                = 0.165d0     ! [1/day] Temperature dependent remineralisation rate of detritus	
+reminN                = 0.2d0     ! [1/day] Temperature dependent remineralisation rate of detritus	
 /
 
 &padetritus_C
-reminC                = 0.15d0      ! [1/day] Temperature dependent remineralisation rate of detritus
+reminC                = 0.18d0      ! [1/day] Temperature dependent remineralisation rate of detritus
 rho_c2                = 0.1d0       ! [1/day] Temperature dependent C degradation of TEP-C
 /
 
