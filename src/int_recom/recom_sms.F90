@@ -250,7 +250,10 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
 
 !< Silicate temperature dependence 
 !    reminSiT = min(1.32e16 * exp(-11200.d0 * rTloc),reminSi) !! arrFunc control, reminSi=0.02d0 ! Kamatani (1982)
-    reminSiT = max(0.023d0 * 2.6d0**((Temp(k)-10.)/10.),reminSi)
+!    reminSiT = max(0.023d0 * 2.6d0**((Temp(k)-10.)/10.),reminSi)
+    reminSiT = max(0.05d0 + 0.018d0 * 2.6d0**((Temp(k)-10.0d0)/10.0d0),reminSi) ! reminSi = 0.15
+    reminNT = max(0.1d0 + 0.033d0 * 2.6d0**((Temp(k)-10.0d0)/10.0d0) * (O2/(O2+15d0)),reminN) ! reminN = 0.2
+    reminCT = max(0.09d0 + 0.030d0 * 2.6d0**((Temp(k)-10.0d0)/10.0d0) * (O2/(O2+15d0)),reminC) ! reminN = 0.18
 !    reminSiT = reminSi
 
 !-------------------------------------------------------------------------------
@@ -1027,7 +1030,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         + aggregationRate              * PhyN    &
         + aggregationRate              * DiaN    &
         + hetLossFlux                            &
-        - reminN * arrFunc             * DetN    &
+        - reminNT                      * DetN    &
                                                ) * dt_b + sms(k,idetn)
    else
     sms(k,idetn)       = (                       &
@@ -1037,7 +1040,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         + aggregationRate              * PhyN    &
         + aggregationRate              * DiaN    &
         + hetLossFlux                            &
-        - reminN * arrFunc             * DetN    &
+        - reminNT                      * DetN    &
                                                ) * dt_b + sms(k,idetn)
    end if   
 !-------------------------------------------------------------------------------
@@ -1053,7 +1056,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         + aggregationRate              * phyC          &
         + aggregationRate              * DiaC          &
         + hetLossFlux * recipQZoo                      &
-        - reminC * arrFunc             * DetC          &
+        - reminCT                       * DetC          &
                                              )   * dt_b + sms(k,idetc)
    else
     sms(k,idetc)       = (                             &
@@ -1064,7 +1067,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         + aggregationRate              * phyC          &
         + aggregationRate              * DiaC          &
         + hetLossFlux * recipQZoo                      &
-        - reminC * arrFunc             * DetC          &
+        - reminCT                      * DetC          &
                                              )   * dt_b + sms(k,idetc)
    end if
 !____________________________________________________________
@@ -1167,7 +1170,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
          - grazingFlux_DetZ22 * grazEff2          &   
          + Zoo2LossFlux                           &
          + Zoo2fecalloss_n                          &
-         - reminN * arrFunc             * DetZ2N  &
+         - reminNT                      * DetZ2N  &
                                                ) * dt_b + sms(k,idetz2n)
      else
       sms(k,idetz2n)       = (                       &
@@ -1177,7 +1180,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
          - grazingFlux2 * grazEff2                &
          + Zoo2LossFlux                           &
          + Zoo2fecalloss_n                          &
-         - reminN * arrFunc             * DetZ2N  &
+         - reminNT                      * DetZ2N  &
                                                ) * dt_b + sms(k,idetz2n)
      end if
  !---------------------------------------------------------------------------------                                                                                            
@@ -1195,7 +1198,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         - grazingFlux_DetZ22 * recipDet2 * grazEff2    &
         + Zoo2LossFlux * recipQZoo2                    &
         + Zoo2fecalloss_c                   & 
-        - reminC * arrFunc             * DetZ2C          &
+        - reminCT                    * DetZ2C          &
                                              )   * dt_b + sms(k,idetz2c)
      else
       sms(k,idetz2c)       = (                             &
@@ -1207,7 +1210,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
         - grazingFlux_het2 * recipQZoo * grazEff2      &
         + Zoo2LossFlux * recipQZoo2                    &
         + Zoo2fecalloss_c                    &
-        - reminC * arrFunc             * DetZ2C          &
+        - reminCT                    * DetZ2C          &
                                              )   * dt_b + sms(k,idetz2c)
      end if
 
@@ -1231,8 +1234,8 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     sms(k,idon)      = (                        &
       + lossN * limitFacN              * phyN   &
       + lossN_d * limitFacN_Dia        * DiaN   &
-      + reminN * arrFunc               * DetN   &
-      + reminN * arrFunc               * DetZ2N &
+      + reminNT                        * DetN   &
+      + reminNT                        * DetZ2N &
       + lossN_z                        * HetN   &
       + lossN_z2                       * Zoo2N  &
       - rho_N * arrFunc                * DON    &
@@ -1243,7 +1246,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     sms(k,idon)      = (                        &
       + lossN * limitFacN              * phyN   &
       + lossN_d * limitFacN_Dia        * DiaN   &
-      + reminN * arrFunc               * DetN   &
+      + reminNT                        * DetN   &
       + lossN_z                        * HetN   &
       - rho_N * arrFunc                * DON    &
 !      + LocRiverDON                             &
@@ -1255,8 +1258,8 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     sms(k,idoc)       = (                       &
       + lossC * limitFacN              * phyC   &
       + lossC_d * limitFacN_dia        * DiaC   &
-      + reminC * arrFunc               * DetC   &
-      + reminC * arrFunc               * DetZ2C &
+      + reminCT                        * DetC   &
+      + reminCT                        * DetZ2C &
       + lossC_z                        * HetC   &
       + lossC_z2                       * Zoo2C  &
       - rho_c1 * arrFunc               * EOC    &
@@ -1266,7 +1269,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     sms(k,idoc)       = (                       &
       + lossC * limitFacN              * phyC   &
       + lossC_d * limitFacN_dia        * DiaC   &
-      + reminC * arrFunc               * DetC   &
+      + reminCT                        * DetC   &
       + lossC_z                        * HetC   &
       - rho_c1 * arrFunc               * EOC    &
 !      + LocRiverDOC                             &
@@ -1438,8 +1441,8 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
                 - N_assim_dia             * DiaC     & ! --> N assimilation Diatom
                 + lossN*limitFacN         * PhyN     & ! --> Excretion from small pythoplankton
                 + lossN_d*limitFacN_dia   * DiaN     & ! --> Excretion from diatom
-                + reminN * arrFunc        * DetN     & ! --> Remineralization of detritus
-                + reminN * arrFunc        * DetZ2N   &
+                + reminNT                 * DetN     & ! --> Remineralization of detritus
+                + reminNT                 * DetZ2N   &
                 + lossN_z                 * HetN     & ! --> Excretion from zooplanton
                 + lossN_z2                * Zoo2N    &         
                                                )     &
@@ -1454,8 +1457,8 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
                 +  phyRespRate_dia        * DiaC     & ! Diatom respiration
                 +  lossC*limitFacN        * phyC     & ! Exrcetion from small pythoplankton
                 +  lossC_d*limitFacN_dia  * diaC     & ! Excretion from diatom
-                +  reminC * arrFunc       * detC     & ! Remineralization of detritus
-                +  reminC * arrFunc       * DetZ2C   &
+                +  reminCT                * detC     & ! Remineralization of detritus
+                +  reminCT                * DetZ2C   &
                 +  lossC_z                * hetC     & ! Excretion from zooplanton
                 +  hetRespFlux                       & ! Zooplankton respiration
                 +  lossC_z2               * Zoo2C    &
@@ -1473,7 +1476,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
                 - N_assim_dia             * DiaC      &
                 + lossN*limitFacN         * PhyN      &
                 + lossN_d*limitFacN_dia   * DiaN      &
-                + reminN * arrFunc        * DetN      &
+                + reminNT                 * DetN      &
                 + lossN_z                 * HetN )    &
                 - kScavFe                 * DetC * FreeFe &
                                               ) * dt_b + sms(k,ife)
@@ -1485,7 +1488,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
                 +  phyRespRate_dia        * DiaC     &
                 +  lossC*limitFacN        * phyC     &
                 +  lossC_d*limitFacN_dia  * diaC     &
-                +  reminC * arrFunc       * detC     &
+                +  reminCT                * detC     &
                 +  lossC_z                * hetC     &
                 +  hetRespFlux  )                    &
                 -  kScavFe                * DetC * FreeFe   & 
@@ -1606,7 +1609,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
                 + aggregationRate              * phyC_13        &
                 + aggregationRate              * DiaC_13        &
                 + hetLossFlux * recipQZoo_13                    &
-                - reminC * arrFunc             * DetC_13        &
+                - reminCT                      * DetC_13        &
                                                    )   * dt_b + sms(k,idetc_13)
 !-------------------------------------------------------------------------------
 ! Detritus C_14
@@ -1618,7 +1621,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
                 + aggregationRate              * phyC_14        &
                 + aggregationRate              * DiaC_14        &
                 + hetLossFlux * recipQZoo_14                    &
-                - reminC * arrFunc             * DetC_14        &
+                - reminCT                      * DetC_14        &
                                                    )   * dt_b + sms(k,idetc_14)
 !-------------------------------------------------------------------------------
 ! Heterotrophic C_13
@@ -1643,7 +1646,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
             sms(k,idoc_13)       = (                            &
                 + lossC * limitFacN              * phyC_13      &
                 + lossC_d * limitFacN_dia        * DiaC_13      &
-                + reminC * arrFunc               * DetC_13      &
+                + reminCT                        * DetC_13      &
                 + lossC_z                        * HetC_13      &
                 - rho_c1 * arrFunc               * EOC_13       &
                 + LocRiverDOC * alpha_iorg_13                   &
@@ -1653,7 +1656,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
             sms(k,idoc_14)       = (                            &
                 + lossC * limitFacN              * phyC_14      &
                 + lossC_d * limitFacN_dia        * DiaC_14      &
-                + reminC * arrFunc               * DetC_14      &
+                + reminCT                        * DetC_14      &
                 + lossC_z                        * HetC_14      &
                 - rho_c1 * arrFunc               * EOC_14       &
                 + LocRiverDOC * alpha_iorg_14                   &
