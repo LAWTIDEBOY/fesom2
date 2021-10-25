@@ -139,6 +139,10 @@ module recom_config
 !! *** For light calculations ***
   Real(kind=8)                 :: k_w            = 0.04d0         ! [1/m]              Light attenuation coefficient
   Real(kind=8)                 :: a_chl          = 0.03d0         ! [1/m * 1/(mg Chl)] Chlorophyll specific attenuation coefficients
+  Real(kind=8)                 :: lambda                          ! wavelength in the PAR spectrum
+  Real(kind=8)                 :: Scdom          = 0.0187d0       ! CDOM spectral slope, Matsuoka et al. 2017
+  Real(kind=8)                 :: Axcdom         = 0.0029d0       ! CDOM regression parameter 1, Matsuoka et al. 2017
+  Real(kind=8)                 :: Excdom         = 2.2321d0       ! CDOM regression parameter 2, Matsuoka et al. 2017
   namelist /palight_calculations/ k_w, a_chl   
 !!------------------------------------------------------------------------------
 !! *** Photosynthesis ***
@@ -334,6 +338,8 @@ Module REcoM_declarations
   Real(kind=8)  :: arrFuncZoo2           ! []    Temperature function for krill     
 !  endif
   Real(kind=8)  :: reminSiT
+  Real(kind=8)  :: reminCT
+  Real(kind=8)  :: reminNT
 !-------------------------------------------------------------------------------
 ! Quotas
   Real(kind=8)  :: quota, quota_dia           ! [mmol N/mmol C]  Quota between phytoplankton N and C
@@ -366,6 +372,10 @@ Module REcoM_declarations
   Real(kind=8)  :: Chlave                 ! [mg/m3]     vertical average chl between two nodes
   Real(kind=8)  :: Upperlight, Lowerlight ! [?]    light at upper and lower border of control volume
   Real(kind=8)  :: PARave                 ! [?]    Average light in the control volumes
+  Real(kind=8)  :: doc_upper,doc_lower    ! [mg/m3]     DOC  at lower and upper control volume border
+  Real(kind=8)  :: Docave                 ! [mg/m3]     vertical average DOC between two nodes
+  Real(kind=8)  :: a_cdom                 ! [m-1].      scalar [400-700nm] COM absorption 
+  Real(kind=8)  :: a_cdom_443             ! [m-1].       COM absorption at 443 nm
 !-------------------------------------------------------------------------------
 ! Photosynthesis
   Real(kind=8)  :: Cphot, Cphot_dia       ! [1/day] C-specific rate of photosynthesis

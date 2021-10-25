@@ -21,7 +21,7 @@ contains
       result = SEQUENTIAL_IO_RANK
       async_netcdf_allowed = .false.
     else
-      async_netcdf_allowed = .true.
+      async_netcdf_allowed = .false.
     end if    
   end function
 

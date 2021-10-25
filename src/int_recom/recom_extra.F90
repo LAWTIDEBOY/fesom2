@@ -232,7 +232,8 @@ endif
 
 !     CO2filename = trim(REcoMDataPath)//'MonthlyAtmCO2_2019.nc'
 !     CO2filename = trim(REcoMDataPath)//'MonthlyAtmCO2_gcb2020.nc'
-     CO2filename = trim(REcoMDataPath)//'MonthlyAtmCO2_gcb2021.nc'
+!     CO2filename = trim(REcoMDataPath)//'MonthlyAtmCO2_gcb2021.nc'
+     CO2filename = trim(REcoMDataPath)//'MonthlyAtmCO2_hist_ssp370.nc'
 
      totnumyear                 = lastyearoffesomcycle-firstyearoffesomcycle+1
      firstyearofcurrentCO2cycle = lastyearoffesomcycle-numofCO2cycles*totnumyear+(currentCO2cycle-1)*totnumyear
@@ -432,7 +433,7 @@ subroutine River_input(mesh)
 
 !           call read_2ddata_on_grid_NetCDF(Riverfilename, 'DSi', i, RiverDSi2D, mesh) 
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
-            RiverDSi2D = RiverDIN2D * (16/15)   
+            RiverDSi2D = RiverDIN2D * 9.0d0  
 
 
      else
@@ -467,7 +468,7 @@ subroutine River_input(mesh)
 
 !           call read_2ddata_on_grid_NetCDF(Riverfilename, 'DSi', i, RiverDSi2D, mesh) 
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
-            RiverDSi2D = RiverDIN2D * (16/15)
+            RiverDSi2D = RiverDIN2D * 9.0d0
         end if
      end if
 
@@ -541,8 +542,9 @@ subroutine Erosion_input(mesh)
 !           write(*,*) mype, 'ErosionTON2D', maxval(ErosionTON2D(:)), minval(ErosionTON2D(:))
 
            ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
-	   ErosionTSi2D=ErosionTON2D * 16/15
-!           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:))        
+
+	   ErosionTSI2D=ErosionTON2D * 9.0d0
+!           write(*,*) mype, 'ErosionTSI2D', maxval(ErosionTSI2D(:)), minval(ErosionTSI2D(:))        
      else
 
 !-Checking if files need to be opened---------------------------------------------
@@ -563,13 +565,13 @@ subroutine Erosion_input(mesh)
 !           write(*,*) mype, 'ErosionTON2D', maxval(ErosionTON2D(:)), minval(ErosionTON2D(:))        
 
             ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
-	    ErosionTSi2D=ErosionTON2D * 16/15 
-!           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:))        
+
+	    ErosionTSI2D=ErosionTON2D * 9.0d0 
+!           write(*,*) mype, 'ErosionTSI2D', maxval(ErosionTSI2D(:)), minval(ErosionTSI2D(:))        
         end if
      end if
   else
      is_erosioninput = 0.0d0
-
      ErosionTOC2D = 0.0d0
      ErosionTON2D = 0.0d0
      ErosionTSi2D = 0.0d0

@@ -25,16 +25,15 @@ landice_end_mon=10
 /
 
 &nam_sbc
-   nm_xwind_file = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'        ! name of file with winds, if nm_sbc=2
-   nm_ywind_file = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'        ! name of file with winds, if nm_sbc=2
-   nm_humi_file  = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'        ! name of file with humidity
-   nm_qsr_file   = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'    ! name of file with solar heat
-   nm_qlw_file   = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'    ! name of file with Long wave
-   nm_tair_file  = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'        ! name of file with 2m air temperature
-   nm_prec_file  = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_' ! name of file with total precipitation
-   nm_snow_file  = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_' ! name of file with snow  precipitation
-   nm_mslp_file  = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'         ! air_pressure_at_sea_level
-   nm_cloud_file = '/scratch/usr/hbkoziel/forcing/AWICM_RYF/echam6_echam_'
+      nm_xwind_file = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'        ! name of file with winds, if nm_sbc=2
+   nm_ywind_file = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'        ! name of file with winds, if nm_sbc=2
+   nm_humi_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'        ! name of file with humidity
+   nm_qsr_file   = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'    ! name of file with solar heat
+   nm_qlw_file   = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'    ! name of file with Long wave
+   nm_tair_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'        ! name of file with 2m air temperature
+   nm_prec_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with total precipitation
+   nm_snow_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with snow  precipitation
+   nm_mslp_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'         ! air_pressure_at_sea_level
    nm_xwind_var  = 'u10'   ! name of variable in file with wind
    nm_ywind_var  = 'v10'   ! name of variable in file with wind
    nm_humi_var   = 'q2m'   ! name of variable in file with humidity
@@ -44,21 +43,17 @@ landice_end_mon=10
    nm_prec_var   = 'PREC'       ! name of variable in file with total precipitation
    nm_snow_var   = 'aprs'       ! name of variable in file with total precipitation
    nm_mslp_var   = 'aps'        ! name of variable in file with air_pressure_at_sea_level
-   nm_cloud_var = 'cloud'    ! name of variable in file with clouds
-   nm_nc_iyear   = 1850
+   nm_nc_iyear   = 1800
    nm_nc_imm     = 1            ! initial month of time axis in netCDF
    nm_nc_idd     = 1            ! initial day of time axis in netCDF
    nm_nc_freq    = 1            ! data points per day (i.e. 86400 if the time axis is in seconds)
    nm_nc_tmid    = 0            ! 1 if the time stamps are given at the mid points of the netcdf file, 0 otherwise (i.e. 1 in CORE1, CORE2; 0 in JRA55)
-   y_perpetual=.false.
+   y_perpetual=.true.
    l_xwind=.true. l_ywind=.true. l_humi=.true. l_qsr=.true. l_qlw=.true. l_tair=.true. l_prec=.true. l_mslp=.true. l_cloud=.false. l_snow=.true.
    nm_runoff_file     ='/scratch/usr/hbkawi/forcing/CORE2/runoff.nc'
    runoff_data_source ='CORE2'
    runoff_climatology =.true.
-   ForcingDataPath    ='/scratch/usr/hbkoziel/forcing/historical_spinup'
+   ForcingDataPath    ='/scratch/usr/hbkncara/input/forcing/historical'
    nm_sss_data_file   ='/scratch/usr/hbkawi/forcing/CORE2/PHC2_salx.nc'
    sss_data_source    ='CORE2'
-   precip_data_source ='AWICM'
-   rad_data_source    ='AWICM'
-   wind_data_source   ='AWICM'
 /
