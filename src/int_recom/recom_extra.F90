@@ -221,7 +221,7 @@ endif
   if (mstep == 1) then ! The year has changed
     if (constant_CO2) then
       AtmCO2(:) = CO2_for_spinup
-      if (mype==0) write(*,*),'in atm_input: Atm CO2=',AtmCO2
+      !if (mype==0) write(*,*),'in atm_input: Atm CO2=',AtmCO2
       if (ciso) then
         AtmCO2_13(:) = CO2_for_spinup_13
         AtmCO2_14(:) = CO2_for_spinup_14
@@ -523,8 +523,8 @@ subroutine Erosion_input(mesh)
 
   ! River inputs are in mmol/m2/s
 
-  ! add erosion as surface boundary condition (surface_bc function in oce_ale_tracers)
-  is_erosioninput = 1.0d0
+     ! add erosion as surface boundary condition (surface_bc function in oce_ale_tracers)
+     is_erosioninput = 1.0d0
 
 
      if (mstep == 1) then ! The year has changed
@@ -542,6 +542,7 @@ subroutine Erosion_input(mesh)
 !           write(*,*) mype, 'ErosionTON2D', maxval(ErosionTON2D(:)), minval(ErosionTON2D(:))
 
            ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
+
 	   ErosionTSI2D=ErosionTON2D * 9.0d0
 !           write(*,*) mype, 'ErosionTSI2D', maxval(ErosionTSI2D(:)), minval(ErosionTSI2D(:))        
      else
@@ -564,16 +565,16 @@ subroutine Erosion_input(mesh)
 !           write(*,*) mype, 'ErosionTON2D', maxval(ErosionTON2D(:)), minval(ErosionTON2D(:))        
 
             ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
+
 	    ErosionTSI2D=ErosionTON2D * 9.0d0 
 !           write(*,*) mype, 'ErosionTSI2D', maxval(ErosionTSI2D(:)), minval(ErosionTSI2D(:))        
         end if
      end if
-
   else
      is_erosioninput = 0.0d0
      ErosionTOC2D = 0.0d0
      ErosionTON2D = 0.0d0
-     ErosionTSI2D = 0.0d0
+     ErosionTSi2D = 0.0d0
   end if 
 end subroutine Erosion_input
 

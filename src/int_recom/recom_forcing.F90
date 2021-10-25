@@ -22,6 +22,7 @@ subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, PAR,
   use g_comm_auto
   use i_therm_param
   use g_comm
+  use g_support
 
   Implicit none
   type(t_mesh), intent(in) , target         :: mesh
@@ -68,6 +69,13 @@ subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, PAR,
 !  do n=1, myDim_nod2D
 !     !!---- Number of vertical layers
 !     nzmax=nlevels_nod2D(n)-1
+
+    tiny_N   = tiny_chl/chl2N_max      ! 0.00001/ 3.15d0   Chl2N_max [mg CHL/mmol N] Maximum CHL a : N ratio = 0.3 gCHL gN^-1
+    tiny_N_d = tiny_chl/chl2N_max_d    ! 0.00001/ 4.2d0
+    tiny_C   = tiny_N  /NCmax          ! NCmax   = 0.2d0   [mmol N/mmol C] Maximum cell quota of nitrogen (N:C)
+    tiny_C_d = tiny_N_d/NCmax_d        ! NCmax_d = 0.2d0 
+    tiny_Si  = tiny_C_d/SiCmax         ! SiCmax = 0.8d0
+
 
   call Cobeta(mesh)        
   call Depth_calculations(n, Nn,SinkVel,zF,thick,recipthick, mesh)
@@ -154,8 +162,13 @@ subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, PAR,
 
 if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_sms'//achar(27)//'[0m'
 
+
+ 
+
+
   call REcoM_sms(n, Nn, state, thick, recipthick, SurfSW, sms, Temp, SinkVel, zF, PAR, mesh)
 
+!  state(1:nn,:)      = state(1:nn,:) + sms(1:nn,:)
   state(1:nn,:)      = max(tiny,state(1:nn,:) + sms(1:nn,:))
 
   state(1:nn,ipchl)  = max(tiny_chl,state(1:nn,ipchl))
@@ -165,6 +178,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_sms'/
   state(1:nn,idian)  = max(tiny_N_d,state(1:nn,idian))
   state(1:nn,idiac)  = max(tiny_C_d,state(1:nn,idiac))
   state(1:nn,idiasi) = max(tiny_Si, state(1:nn,idiasi))
+
 if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> ciso after REcoM_Forcing'//achar(27)//'[0m'
   if (ciso) then
 !    Calculcate isotopic fractionation of 13|14C, radioactive decay of 14C is calculated in oce_ale_tracer.F90

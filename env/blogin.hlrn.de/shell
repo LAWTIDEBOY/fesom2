@@ -1,8 +1,5 @@
 # make the contents as shell agnostic as possible so we can include them with bash, zsh and others
 
-#module load gcc/4.9.3
-#module load intel/17.0.4.196
-
 #module swap PrgEnv-cray PrgEnv-intel
 #module swap cray-mpich cray-mpich
 #module unload cray-hdf5
@@ -63,4 +60,3 @@ export NETCDF_C_INCLUDE_DIRECTORIES=$NETCDFROOT/include
 export NETCDF_CXX_INCLUDE_DIRECTORIES=$NETCDFROOT/netcdf-cxx4-4.3.1/cxx4/
 export OASIS3MCT_FC_LIB="-L$NETCDFFROOT/lib -lnetcdff"
 export ENVIRONMENT_SET_BY_ESMTOOLS=TRUE
-
