@@ -334,6 +334,8 @@ Module REcoM_declarations
   Real(kind=8)  :: arrFuncZoo2           ! []    Temperature function for krill     
 !  endif
   Real(kind=8)  :: reminSiT
+  Real(kind=8)  :: reminNT
+  Real(kind=8)  :: reminCT
 !-------------------------------------------------------------------------------
 ! Quotas
   Real(kind=8)  :: quota, quota_dia           ! [mmol N/mmol C]  Quota between phytoplankton N and C
