@@ -432,7 +432,7 @@ subroutine River_input(mesh)
 
 !           call read_2ddata_on_grid_NetCDF(Riverfilename, 'DSi', i, RiverDSi2D, mesh) 
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
-            RiverDSi2D = RiverDIN2D * (16/15)   
+            RiverDSi2D = RiverDIN2D * 9d0   
 
 
      else
@@ -467,7 +467,7 @@ subroutine River_input(mesh)
 
 !           call read_2ddata_on_grid_NetCDF(Riverfilename, 'DSi', i, RiverDSi2D, mesh) 
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
-            RiverDSi2D = RiverDIN2D * (16/15)
+            RiverDSi2D = RiverDIN2D * 9d0
         end if
      end if
 
@@ -541,7 +541,7 @@ subroutine Erosion_input(mesh)
 !           write(*,*) mype, 'ErosionTON2D', maxval(ErosionTON2D(:)), minval(ErosionTON2D(:))
 
            ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
-	   ErosionTSi2D=ErosionTON2D * 16/15
+	   ErosionTSi2D=ErosionTON2D * 9d0
 !           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:))        
      else
 
@@ -563,7 +563,7 @@ subroutine Erosion_input(mesh)
 !           write(*,*) mype, 'ErosionTON2D', maxval(ErosionTON2D(:)), minval(ErosionTON2D(:))        
 
             ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
-	    ErosionTSi2D=ErosionTON2D * 16/15 
+	    ErosionTSi2D=ErosionTON2D * 9d0
 !           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:))        
         end if
      end if
