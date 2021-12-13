@@ -143,6 +143,11 @@ end if
     allocate(ErosionTON2D(node_size))
     allocate(ErosionTOC2D(node_size))
     allocate(ErosionTSi2D(node_size))
+    
+    allocate(ind_arctic_66_2D(node_size))
+    allocate(ind_arctic_66_3D(nl-1,node_size))
+    allocate(ind_arctic_80_2D(node_size))
+    allocate(ind_arctic_80_3D(nl-1,node_size))
 
     !___initialize______________________________________________________________
     GloFeDust = 0.d0

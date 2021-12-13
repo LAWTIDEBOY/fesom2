@@ -168,7 +168,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_Forci
      GloHplus(n)                  = hplus
      AtmFeInput(n)                = FeDust
      AtmNInput(n)                 = NDust 
-     DenitBen(n)                  = LocDenit
+!     DenitBen(n)                  = LocDenit
 
 !     GlodecayBenthos(n, 1:benthos_num) = decayBenthos(1:benthos_num)/SecondsPerDay ! convert from [mmol/m2/d] to [mmol/m2/s]  
 

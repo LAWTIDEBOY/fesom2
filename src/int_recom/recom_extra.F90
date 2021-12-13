@@ -375,13 +375,15 @@ subroutine River_input(mesh)
   use g_clock
   use g_read_other_NetCDF
   use g_PARSUP
+  use g_forcing_arrays,  only: runoff
+  use g_sbf, only: runoff_climatology
   use o_PARAM, only : mstep, WP
   use mod_MESH
   use REcoM_ciso
   implicit none
   type(t_mesh), intent(in) , target :: mesh  
 #include "netcdf.inc"
-
+  
   real(kind=8), allocatable :: ncdata(:)
   integer	            :: status, ncid, varid
   character(300)            :: Riverfilename
@@ -390,7 +392,7 @@ subroutine River_input(mesh)
   logical                   :: do_read=.false.
   integer                   :: i
   integer                   :: node_size, num_sec_in_month
-
+!  logical                   :: runoff_climatology
 #include "../associate_mesh.h" 
 
   node_size=myDim_nod2D+eDim_nod2D 
@@ -410,8 +412,14 @@ subroutine River_input(mesh)
 !        num_sec_in_month = num_day_in_month(fleapyear,month)
 !        num_sec_in_month=num_sec_in_month*86400
 
-
-           Riverfilename = trim(REcoMDataPath)//'RiverineInput.nc'
+           if (runoff_climatology) then
+              write(*,*) 'runoff climatology :', runoff_climatology
+              Riverfilename = trim(REcoMDataPath)//'RiverineInput.nc'
+           else
+              write(*,*) 'runoff climatology :', runoff_climatology
+              Riverfilename = trim(REcoMDataPath)//'RiverineInput_conc.nc'
+           end if
+           
            if (mype==0) write(*,*) 'Updating riverine restoring data for month ', i,' from ', Riverfilename     
            call read_2ddata_on_grid_NetCDF(Riverfilename, 'Alkalinity', i, RiverAlk2D, mesh)
 !           write(*,*) mype, 'RiverAlk2D', maxval(RiverAlk2D(:)), minval(RiverAlk2D(:))        
@@ -432,8 +440,14 @@ subroutine River_input(mesh)
 
 !           call read_2ddata_on_grid_NetCDF(Riverfilename, 'DSi', i, RiverDSi2D, mesh) 
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
-            RiverDSi2D = RiverDIN2D * 9d0   
-
+            RiverDSi2D = RiverDIN2D * 9d0  
+            
+           if (runoff_climatology) then
+             RiverDSi2D = RiverDSi2D * runoff
+             RiverDIN2D = RiverDIN2D * runoff
+             RiverDON2D = RiverDON2D * runoff
+             RiverDOC2D = RiverDOC2D * runoff
+           end if
 
      else
 
@@ -446,7 +460,12 @@ subroutine River_input(mesh)
 !           num_sec_in_month = num_day_in_month(fleapyear,month)
 !           num_sec_in_month=num_sec_in_month*86400
 
-           Riverfilename = trim(REcoMDataPath)//'RiverineInput.nc'
+           if (runoff_climatology) then
+              Riverfilename = trim(REcoMDataPath)//'RiverineInput.nc'
+           else
+              Riverfilename = trim(REcoMDataPath)//'RiverineInput_conc.nc'
+           end if
+           
            if (mype==0) write(*,*) 'Updating riverine restoring data for month ', i,' from ', Riverfilename     
            call read_2ddata_on_grid_NetCDF(Riverfilename, 'Alkalinity', i, RiverAlk2D, mesh) 
 !           write(*,*) mype, 'RiverAlk2D', maxval(RiverAlk2D(:)), minval(RiverAlk2D(:))   
@@ -463,11 +482,17 @@ subroutine River_input(mesh)
 !           write(*,*) mype, 'RiverDOC2D', maxval(RiverDOC2D(:)), minval(RiverDOC2D(:))     
 
            call read_2ddata_on_grid_NetCDF(Riverfilename, 'DON', i, RiverDON2D, mesh) 
-!           write(*,*) mype, 'RiverDON2D', maxval(RiverDON2D(:)), minval(RiverDON2D(:))     
-
+!           write(*,*) mype, 'RiverDON2D', maxval(RiverDON2D(:)), minval(RiverDON2D(:))
 !           call read_2ddata_on_grid_NetCDF(Riverfilename, 'DSi', i, RiverDSi2D, mesh) 
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
             RiverDSi2D = RiverDIN2D * 9d0
+            
+           if (runoff_climatology .eqv. .false.) then
+             RiverDSi2D = RiverDSi2D * runoff
+             RiverDIN2D = RiverDIN2D * runoff
+             RiverDON2D = RiverDON2D * runoff
+             RiverDOC2D = RiverDOC2D * runoff
+           end if
         end if
      end if
 

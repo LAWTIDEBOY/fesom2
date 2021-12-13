@@ -155,39 +155,11 @@ end subroutine compute_carbon_diag
 
 
 subroutine compute_silicate_diag(mode,mesh)
-  use REcoM_declarations
-  use REcoM_LocVar
-  use REcoM_GloVar
-  use g_clock
-  use o_PARAM
-  USE o_ARRAYS
-  use g_PARSUP
-  use mod_MESH
-  use g_comm_auto
+
   implicit none
   integer, intent(in)        :: mode
   type(t_mesh), intent(in)  , target :: mesh
   logical, save              :: firstcall=.true.
-  integer                    :: k
-#include  "../associate_mesh.h"
-  
-  ind_arctic_66_3D = 1.0_WP
-  ind_arctic_66_2D = 1.0_WP
-  do k=1, myDim_nod2D+eDim_nod2D
-      if (geo_coord_nod2D(2,k) < 66*rad) then
-          ind_arctic_66_3D(:,k) = 0.0_WP
-          ind_arctic_66_2D(k) = 0.0_WP
-      end if
-  end do
-  
-  ind_arctic_80_3D = 1.0_WP
-  ind_arctic_80_2D = 1.0_WP
-  do k=1, myDim_nod2D+eDim_nod2D
-      if (geo_coord_nod2D(2,k) < 80*rad) then
-          ind_arctic_80_3D(:,k) = 0.0_WP
-          ind_arctic_80_2D(k) = 0.0_WP
-      end if
-  end do
 
   if (firstcall) then  !allocate the stuff at the first call
     total_del_silicate=0.0 ! accumulates
@@ -197,29 +169,29 @@ subroutine compute_silicate_diag(mode,mesh)
     total_silicate=0.0 ! snapshot
 
         !DSi
-        call integrate_nod(tr_arr(:,:,20)*ind_arctic_80_3D, valDSi, mesh)
+        call integrate_nod(tr_arr(:,:,20), valDSi, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of DSi at timestep :', mstep, valDSi
         total_silicate=total_silicate+valDSi
 
         !DiaSi
-        call integrate_nod(tr_arr(:,:,18)*ind_arctic_80_3D, valDiaSi, mesh)
+        call integrate_nod(tr_arr(:,:,18), valDiaSi, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of DiaSi at timestep :', mstep, valDiaSi
         total_silicate=total_silicate+valDiaSi
 
         !DetSi
-        call integrate_nod(tr_arr(:,:,19)*ind_arctic_80_3D, valDetSi, mesh)
+        call integrate_nod(tr_arr(:,:,19), valDetSi, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of DetSi at timestep :', mstep, valDetSi
         total_silicate=total_silicate+valDetSi
 
 !if (REcoM_Second_Zoo) then
         !Detz2Si
-        call integrate_nod(tr_arr(:,:,29)*ind_arctic_80_3D, valDetz2Si, mesh)
+        call integrate_nod(tr_arr(:,:,29), valDetz2Si, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of Detz2Si at timestep :', mstep, valDetSi
         total_silicate=total_silicate+valDetz2Si
 !end if 
         !BenSi
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenSi*ind_arctic_80_2D,mesh)
+         call integrate_bottom(valBenSi,mesh)
 !        sum(add_benthos_3d) ! MPI_sum
 !        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of BenSi at timestep :', mstep, valBenSi
         total_silicate=total_silicate+valBenSi
@@ -230,7 +202,7 @@ subroutine compute_silicate_diag(mode,mesh)
 
 ! **********************************************
         !delDSi
-        call integrate_nod(Gloaddtiny(:,:,1)*ind_arctic_80_3D, valdelDSi, mesh)
+        call integrate_nod(Gloaddtiny(:,:,1), valdelDSi, mesh)
         !call integrate_nod(Gloaddtiny(:,:,5), valdelDSii, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of tiny DSi at timestep :', mstep, valdelDSi
         total_del_silicate=total_del_silicate+valdelDSi+valdelDSii
@@ -238,14 +210,14 @@ subroutine compute_silicate_diag(mode,mesh)
 
 
         !delDetSi
-        call integrate_nod(Gloaddtiny(:,:,2)*ind_arctic_80_3D, valdelDetSi, mesh)
+        call integrate_nod(Gloaddtiny(:,:,2), valdelDetSi, mesh)
         !call integrate_nod(Gloaddtiny(:,:,6), valdelDetSii, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of DetSi at timestep :', mstep, valdelDetSi
         total_del_silicate=total_del_silicate+valdelDetSi+valdelDetSii
         !total_silicate=total_silicate-valdelDetSi-valdelDetSii
 
         !delDiaSi
-        call integrate_nod(Gloaddtiny(:,:,3)*ind_arctic_80_3D, valdelDiaSi, mesh)
+        call integrate_nod(Gloaddtiny(:,:,3), valdelDiaSi, mesh)
         !call integrate_nod(Gloaddtiny(:,:,7), valdelDiaSii, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of DiaSi at timestep :', mstep, valdelDiaSi
         total_del_silicate=total_del_silicate+valdelDiaSi+valdelDiaSii
@@ -253,7 +225,7 @@ subroutine compute_silicate_diag(mode,mesh)
 
 !if (REcoM_Second_Zoo) then
         !delDetz2Si
-        call integrate_nod(Gloaddtiny(:,:,4)*ind_arctic_80_3D, valdelDetz2Si, mesh)
+        call integrate_nod(Gloaddtiny(:,:,4), valdelDetz2Si, mesh)
         !call integrate_nod(Gloaddtiny(:,:,8), valdelDetz2Sii, mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral of Detz2Si at timestep :', mstep, valdelDetSi
         total_del_silicate=total_del_silicate+valdelDetz2Si+valdelDetz2Sii
