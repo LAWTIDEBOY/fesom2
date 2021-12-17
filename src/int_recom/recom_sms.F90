@@ -1769,25 +1769,25 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
 !*** DIN ***
 !< decayRateBenN: Remineralization rate for benthic N [day^-1]
 !< LocBenthos(1): Vertically integrated N concentration in benthos (1 layer) [mmolN/m^2]
-!  decayBenthos(1) = decayRateBenN * LocBenthos(1)                                       ! flux
-!  LocBenthos(1)   = LocBenthos(1)   - decaybenthos(1) * dt_b ! / depth of benthos    ! remove from benthos (flux)
+  decayBenthos(1) = decayRateBenN * LocBenthos(1)                                       ! flux
+  LocBenthos(1)   = LocBenthos(1)   - decaybenthos(1) * dt_b ! / depth of benthos    ! remove from benthos (flux)
 
 !*** DIC ***
 !< decayRateBenC: Remineralization rate for benthic C [day^-1]
 !< LocBenthos(2): Vertically integrated C concentration in benthos (1 layer) [mmolC/m^2]		
-!  decayBenthos(2) = decayRateBenC * LocBenthos(2)
-!  LocBenthos(2)   = LocBenthos(2)   - decaybenthos(2) * dt_b ! / depth of benthos
+  decayBenthos(2) = decayRateBenC * LocBenthos(2)
+  LocBenthos(2)   = LocBenthos(2)   - decaybenthos(2) * dt_b ! / depth of benthos
 
 
 !*** Si ***
 !< decayRateBenSi: Remineralization rate for benthic Si [day^-1]
 !< LocBenthos(3) : Vertically integrated N concentration in benthos (1 layer) [mmolSi/m^2]		
-!  decayBenthos(3) = decayRateBenSi * LocBenthos(3)                                      ! [1/day] * [mmolSi/m2] -> [mmolSi/m2/day]
-!  LocBenthos(3)   = LocBenthos(3)   - decaybenthos(3) * dt_b ! / depth of benthos    ! [mmolSi/m2]
+  decayBenthos(3) = decayRateBenSi * LocBenthos(3)                                      ! [1/day] * [mmolSi/m2] -> [mmolSi/m2/day]
+  LocBenthos(3)   = LocBenthos(3)   - decaybenthos(3) * dt_b ! / depth of benthos    ! [mmolSi/m2]
 
 !*** Calc: DIC, Alk ***
-!  decayBenthos(4) = calc_diss * LocBenthos(4)
-!  LocBenthos(4)      = LocBenthos(4)   - decayBenthos(4) * dt_b ! / depth of benthos
+  decayBenthos(4) = calc_diss * LocBenthos(4)
+  LocBenthos(4)      = LocBenthos(4)   - decayBenthos(4) * dt_b ! / depth of benthos
 
   if (ciso) then
 !*** DIC_13 ***  We ignore isotopic fractionation during remineralization.

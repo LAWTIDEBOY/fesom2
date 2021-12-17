@@ -170,7 +170,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_Forci
      AtmNInput(n)                 = NDust 
 !     DenitBen(n)                  = LocDenit
 
-!     GlodecayBenthos(n, 1:benthos_num) = decayBenthos(1:benthos_num)/SecondsPerDay ! convert from [mmol/m2/d] to [mmol/m2/s]  
+     GlodecayBenthos(n, 1:benthos_num) = decayBenthos(1:benthos_num)/SecondsPerDay ! convert from [mmol/m2/d] to [mmol/m2/s]  
 
 !     GlowFluxDet(n, 1:benthos_num*2)= wFluxDet(1:benthos_num*2)/SecondsPerDay  ! convert from [mmol/m2/d] to [mmol/m2/s]  
 !     GlowFluxPhy(n, 1:benthos_num  )= wFluxPhy(1:benthos_num  )/SecondsPerDay  ! convert from [mmol/m2/d] to [mmol/m2/s] 

@@ -350,14 +350,14 @@ if (1) then
         tracer_id(tr_num) == 1034 .or.    &   ! DIC_14
 #endif
         tracer_id(tr_num) == 1022     ) then  ! Oxy
-!        call diff_ver_recom_expl(tr_num,mesh)
+        call diff_ver_recom_expl(tr_num,mesh)
 ! update tracer fields
-!        do n=1, myDim_nod2D 
-!            nzmax=nlevels_nod2D(n)-1
-!            nzmin=ulevels_nod2D(n)
-!            tr_arr(nzmin:nzmax,n,tr_num)=tr_arr(nzmin:nzmax,n,tr_num)+ &
-!                                        dtr_bf(nzmin:nzmax,n)
-!        end do
+        do n=1, myDim_nod2D 
+            nzmax=nlevels_nod2D(n)-1
+            nzmin=ulevels_nod2D(n)
+            tr_arr(nzmin:nzmax,n,tr_num)=tr_arr(nzmin:nzmax,n,tr_num)+ &
+                                        dtr_bf(nzmin:nzmax,n)
+        end do
     end if
 
 ! 2) Sinking in water column 

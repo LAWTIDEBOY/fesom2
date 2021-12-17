@@ -48,7 +48,7 @@ if (mype==0 .and. (mod(mstep,100)==0))  print *, achar(27)//'[37m'//'         --
 
 !        if (tracer_id(tr_num)==1008) then !idetc
            Vben = VDet
-           if (allow_var_sinking) Vben = Vdet_a * abs(zbar_3d_n(:,n)) + VDet/SecondsPerDay
+           if (allow_var_sinking) Vben = (Vdet_a * abs(zbar_3d_n(:,n)) + VDet)/SecondsPerDay
 !        end if 
 
         k=nod_in_elem2D_num(n)
