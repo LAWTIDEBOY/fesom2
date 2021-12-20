@@ -1052,6 +1052,7 @@ CONTAINS
       real(wp)     :: rdate ! date
       integer      :: fld_idx, i
       logical      :: do_rotation, force_newcoeff, update_monthly_flag
+      logical   :: update_daily_flag ! CN: for river runoff from AWICM
       integer      :: yyyy, dd, mm
       integer,   pointer   :: nc_Ntime, t_indx, t_indx_p1
       real(wp),  pointer   :: nc_time(:)
@@ -1102,7 +1103,8 @@ CONTAINS
       ! prepare a flag which checks whether to update monthly data (SSS, river runoff)
       !update_monthly_flag=((day_in_month==num_day_in_month(fleapyear,month) .and. timenew==86400._WP))
       update_monthly_flag=( (day_in_month==num_day_in_month(fleapyear,month) .AND. timenew==86400._WP) .OR. mstep==1  )
-
+      ! CN: same for daily forcing (river runoff from AWICM)
+      update_daily_flag = ( (timenew==86400._WP) .OR. mstep==1 )
 
       ! read in SSS for applying SSS restoring
       if (surf_relax_S > 0._WP) then
@@ -1154,6 +1156,17 @@ CONTAINS
 
      end if
 
+     !CN: AWICM runoff
+     if(runoff_data_source=='AWICM') then
+      if(update_daily_flag) then
+        ! daily data (already in m/s)
+        i=daynew
+        filename=trim(nm_runoff_file)//cyearnew//'0101_redistributed.nc' !runoff_fesom_19630101_redistributed.nc
+      !if (mype==0) write(*,*) filename
+        call read_2ddata_on_grid_NetCDF(filename,'runoff', i, runoff, mesh)
+      !if (mype==0) write(*,*) 'Day ',i,', runoff: min=', minval(runoff),';max=',maxval(runoff)
+      endif
+     endif
 
       ! interpolate in time
       call data_timeinterp(rdate)
