@@ -17,7 +17,7 @@ recom_binary_init     = .false.     ! Restart from binary
 bgc_num               = 28 !24 !38
 diags3d_num           = 8           ! Number of diagnostic 3d tracers to be saved
 VDet                  = 20.d0       ! Sinking velocity, constant through the water column and positive downwards
-VDet_zoo2             = 20.d0       ! Sinking velocity, constant through the water column
+VDet_zoo2             = 200.d0       ! Sinking velocity, constant through the water column
 VPhy                  = 0.d0        !!! If the number of sinking velocities are different from 3, code needs to be changed !!!
 VDia                  = 0.d0 
 allow_var_sinking     = .true.   
@@ -32,21 +32,21 @@ het_resp_noredfield   = .true.    ! Decides respiratation of copepod group
 diatom_mucus          = .true.    ! Decides nutrient limitation effect on aggregation
 Graz_pref_new         = .true.    ! If it is true Fasham 1990, if not recom original variable preference
 Diags                 = .true.
-constant_CO2          = .true.
+constant_CO2          = .false.
 UseFeDust             = .true.      ! Turns dust input of iron off when set to.false.
 UseDustClim           = .true.
 UseDustClimAlbani     = .true.     ! Use Albani dustclim field (If it is false Mahowald will be used)
 use_Fe2N              = .true.      ! use Fe2N instead of Fe2C, as in MITgcm version
-use_photodamage       = .true.      ! use Alvarez et al (2018) for chlorophyll degradation
+use_photodamage       = .false.      ! use Alvarez et al (2018) for chlorophyll degradation
 HetRespFlux_plus      = .true.      !MB More stable computation of zooplankton respiration fluxes adding a small number to HetN
-REcoMDataPath         = '/work/ollie/ogurses/input/mesh_CORE2_finaltopo_mean/' !'/work/ollie/projects/MarESys/forcing/CORE2mesh/'
+REcoMDataPath         = '/scratch/usr/hbkoziel/input/mesh_fArc/'
 restore_alkalinity    = .true.
 useRivers             = .false.
 useErosion            = .false.
-NitrogenSS            = .false.     ! When set to true, external sources and sinks of nitrogen are activated (Riverine, aeolian and denitrification)
-useAeolianN           = .false.      ! When set to true, aeolian nitrogen deposition is activated
-firstyearoffesomcycle = 1851        ! The first year of the actual physical forcing (e.g. JRA-55) used
-lastyearoffesomcycle  = 1957        ! Last year of the actual physical forcing used
+NitrogenSS            = .true.     ! When set to true, external sources and sinks of nitrogen are activated (Riverine, aeolian and denitrification)
+useAeolianN           = .true.      ! When set to true, aeolian nitrogen deposition is activated
+firstyearoffesomcycle = 1900        ! The first year of the actual physical forcing (e.g. JRA-55) used
+lastyearoffesomcycle  = 1949        ! Last year of the actual physical forcing used
 numofCO2cycles        = 1           ! Number of cycles of the forcing planned 
 currentCO2cycle       = 1           ! Which CO2 cycle we are currently running
 DIC_PI                = .true.
@@ -190,8 +190,8 @@ lossC_d               = 0.10d0
 /
 
 &paphytoplankton_ChlA
-deg_Chl               = 0.2d0 !0.25d0      ! [1/day]
-deg_Chl_d             = 0.2d0 !0.15d0
+deg_Chl               = 0.20d0 !0.25d0      ! [1/day]
+deg_Chl_d             = 0.20d0 !0.15d0
 /
 
 &padetritus_N
@@ -261,4 +261,3 @@ lambda_14             = 3.8561e-12  ! corresponding to 1 year = 365.00 days
 CO2_for_spinup_13     = 282.4       ! atmospheric 13CO2 spinup value (Graven et al. 2017: d13C = -6.61 permil, CO2_for_spinup = 284.3 uatm)
 CO2_for_spinup_14     = 294.0       ! atmospheric 14CO2 spinup value (Graven et al. 2017: d14C = -4.05 permil, CO2_for_spinup = 284.3 uatm)
 /
-
