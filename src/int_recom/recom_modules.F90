@@ -503,6 +503,8 @@ Module REcoM_GloVar
   real(kind=8), allocatable,dimension(:)  :: ErosionTSi2D, ErosionTON2D, ErosionTOC2D
 !! Cobeta, Cos(Angle of incidence)
   Real(kind=8), allocatable,dimension(:)  ::  cosAI
+  Real(kind=8), allocatable,dimension(:,:)  ::  ind_arctic_66_3D, ind_arctic_80_3D
+  Real(kind=8), allocatable,dimension(:)  ::  ind_arctic_66_2D, ind_arctic_80_2D
 end module REcoM_GloVar
 
 !===============================================================================
