@@ -25,7 +25,7 @@ module recom_diag
 #include "netcdf.inc"
   private
 
-  public :: ldiag_carbon, ldiag_silicate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq, total_carbon, total_silicate, &
+  public :: ldiag_carbon, ldiag_silicate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq, total_carbon, total_silicate, total_del_silicate, &
             compute_carbon_diag, compute_silicate_diag, write_recom_diag, compute_recom_diagnostics, precom_diag_list
 
   real(kind=WP),  save,  target                 :: total_carbon
