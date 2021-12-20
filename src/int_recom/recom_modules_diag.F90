@@ -25,7 +25,7 @@ module recom_diag
 #include "netcdf.inc"
   private
 
-  public :: ldiag_carbon, ldiag_silicate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq, total_carbon, total_silicate, total_del_silicate, &
+  public :: ldiag_carbon, ldiag_silicate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq, total_carbon, total_silicate, &
             compute_carbon_diag, compute_silicate_diag, write_recom_diag, compute_recom_diagnostics, precom_diag_list
 
   real(kind=WP),  save,  target                 :: total_carbon
@@ -179,11 +179,10 @@ subroutine compute_silicate_diag(mode,mesh)
   end do
 
   if (firstcall) then  !allocate the stuff at the first call
-    total_del_silicate=0.0 ! accumulates
+    total_silicate=0.0 ! accumulates
     firstcall=.false.
     if (mode==0) return
   end if
-    total_silicate=0.0 ! snapshot
 
         !DSi
         call integrate_nod(tr_arr(:,:,20)*ind_arctic_80_3D, valDSi, mesh)
