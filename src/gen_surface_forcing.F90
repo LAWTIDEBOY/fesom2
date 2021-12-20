@@ -83,10 +83,10 @@ MODULE g_sbf
    logical :: l_snow  = .false.
 
    character(10),      save   :: runoff_data_source='CORE2'
-   character(len=MAX_PATH), save   :: nm_runoff_file    ='runoff.nc'
+   character(len=MAX_PATH), save   :: nm_runoff_file    ='/scratch/usr/hbkawi/forcing/CORE2/runoff.nc'
 
    character(10),      save   :: sss_data_source   ='CORE2'
-   character(len=MAX_PATH), save   :: nm_sss_data_file  ='PHC2_salx.nc'
+   character(len=MAX_PATH), save   :: nm_sss_data_file  ='/scratch/usr/hbkawi/forcing/CORE2/PHC2_salx.nc'
 
    logical :: runoff_climatology =.false.
 
@@ -114,34 +114,34 @@ MODULE g_sbf
    logical        :: ic_cyclic=.true.
   !============== namelistatmdata variables ================
    integer, save  :: nm_sbc       = 1        ! data  1= constant, 2=from file
-   character(len=256), save   :: nm_xwind_file = 'xwind.dat' ! name of file with winds/stress, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_ywind_file = 'ywind.dat' ! name of file with winds/stress, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_humi_file  = 'humidity.dat' ! name of file with humidity,  if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_qsr_file   = 'qsr.dat'   ! name of file with solar heat,   if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_qlw_file   = 'qlw.dat'   ! name of file with Long wave,    if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_tair_file  = 'tair.dat'  ! name of file with 2m air temperature, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_prec_file  = 'prec.dat'  ! name of file with total precipitation, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_snow_file  = 'snow.dat'  ! name of file with snow  precipitation, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_mslp_file  = 'mslp.dat'  ! name of file with mean sea level pressure, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
-   character(len=256), save   :: nm_cloud_file = 'cloud.dat'  ! name of file with clouds, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_xwind_file = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with winds/stress, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_ywind_file = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with winds/stress, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_humi_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_' ! name of file with humidity,  if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_qsr_file   = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'   ! name of file with solar heat,   if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_qlw_file   = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'   ! name of file with Long wave,    if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_tair_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'  ! name of file with 2m air temperature, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_prec_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'  ! name of file with total precipitation, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_snow_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'  ! name of file with snow  precipitation, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_mslp_file  = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'  ! name of file with mean sea level pressure, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
+   character(len=256), save   :: nm_cloud_file = '/scratch/usr/hbkncara/input/forcing/historical/echam6_echam_'  ! name of file with clouds, if netcdf file then provide only name from "nameyyyy.nc" yyyy.nc will be added by model
 
-   character(len=34), save   :: nm_xwind_var = 'uwnd' ! name of variable in file with wind
-   character(len=34), save   :: nm_ywind_var = 'vwnd' ! name of variable in file with wind
-   character(len=34), save   :: nm_humi_var  = 'shum' ! name of variable in file with humidity
-   character(len=34), save   :: nm_qsr_var   = 'dswrf'! name of variable in file with solar heat
-   character(len=34), save   :: nm_qlw_var   = 'dlwrf'! name of variable in file with Long wave
-   character(len=34), save   :: nm_tair_var  = 'air'  ! name of variable in file with 2m air temperature
-   character(len=34), save   :: nm_prec_var  = 'prate'! name of variable in file with total precipitation
-   character(len=34), save   :: nm_snow_var  = 'snow' ! name of variable in file with snow  precipitation
-   character(len=34), save   :: nm_mslp_var  = 'mslp' ! name of variable in file with mean sea level pressure
+   character(len=34), save   :: nm_xwind_var = 'u10' ! name of variable in file with wind
+   character(len=34), save   :: nm_ywind_var = 'v10' ! name of variable in file with wind
+   character(len=34), save   :: nm_humi_var  = 'q2m' ! name of variable in file with humidity
+   character(len=34), save   :: nm_qsr_var   = 'DSWR'! name of variable in file with solar heat
+   character(len=34), save   :: nm_qlw_var   = 'DLWR'! name of variable in file with Long wave
+   character(len=34), save   :: nm_tair_var  = 'temp2'  ! name of variable in file with 2m air temperature
+   character(len=34), save   :: nm_prec_var  = 'PREC'! name of variable in file with total precipitation
+   character(len=34), save   :: nm_snow_var  = 'aprs' ! name of variable in file with snow  precipitation
+   character(len=34), save   :: nm_mslp_var  = 'aps' ! name of variable in file with mean sea level pressure
    character(len=34), save   :: nm_cloud_var = 'cloud'! name of variable in file with clouds
 
    ! ========== netCDF time param
-   integer, save :: nm_nc_iyear = 1948    ! initial year of time axis in netCDF (1948 like CoastDat,1800 NCEP)
+   integer, save :: nm_nc_iyear = 1850    ! initial year of time axis in netCDF (1948 like CoastDat,1800 NCEP)
    integer, save :: nm_nc_imm   = 1       ! initial month of time axis in netCDF
    integer, save :: nm_nc_idd   = 1       ! initial day of time axis in netCDF
-   real,    save :: nm_nc_freq  = 86400.0 ! time units coef (86400 CoastDat, 24 NCEP)
-   integer, save :: nm_nc_tmid  = 1       ! 1 if the time stamps are given at the mid points of the netcdf file, 0 otherwise!
+   real,    save :: nm_nc_freq  = 1.0 ! time units coef (86400 CoastDat, 24 NCEP)
+   integer, save :: nm_nc_tmid  = 0       ! 1 if the time stamps are given at the mid points of the netcdf file, 0 otherwise!
    logical, save :: y_perpetual=.false.
 
    integer,save            :: warn       ! warning switch node/element coordinate out of forcing bounds
@@ -477,16 +477,16 @@ CONTAINS
       !! ** Purpose : Fill names of sbc_flfi array (file names and variable names)
 
       !prepare proper nc file (add year and .nc to the end of the file name from namelist
-      if (l_xwind) write(sbc_flfi(i_xwind)%file_name, *) trim(nm_xwind_file),trim(yyear),'.nc'
-      if (l_ywind) write(sbc_flfi(i_ywind)%file_name, *) trim(nm_ywind_file),trim(yyear),'.nc'
-      if (l_humi)  write(sbc_flfi(i_humi)%file_name,  *) trim(nm_humi_file), trim(yyear),'.nc'
-      if (l_qsr)   write(sbc_flfi(i_qsr)%file_name,   *) trim(nm_qsr_file),  trim(yyear),'.nc'
-      if (l_qlw)   write(sbc_flfi(i_qlw)%file_name,   *) trim(nm_qlw_file),  trim(yyear),'.nc'
-      if (l_tair)  write(sbc_flfi(i_tair)%file_name,  *) trim(nm_tair_file), trim(yyear),'.nc'
-      if (l_prec)  write(sbc_flfi(i_prec)%file_name,  *) trim(nm_prec_file), trim(yyear),'.nc'
-      if (l_snow)  write(sbc_flfi(i_snow)%file_name,  *) trim(nm_snow_file), trim(yyear),'.nc'
-      if (l_mslp)  write(sbc_flfi(i_mslp)%file_name,  *) trim(nm_mslp_file), trim(yyear),'.nc'
-      if (l_cloud) write(sbc_flfi(i_cloud)%file_name, *) trim(nm_cloud_file),trim(yyear),'.nc'
+      if (l_xwind) write(sbc_flfi(i_xwind)%file_name, *) trim(nm_xwind_file),trim(yyear),'01_reduced.nc'
+      if (l_ywind) write(sbc_flfi(i_ywind)%file_name, *) trim(nm_ywind_file),trim(yyear),'01_reduced.nc'
+      if (l_humi)  write(sbc_flfi(i_humi)%file_name,  *) trim(nm_humi_file), trim(yyear),'01_reduced.nc'
+      if (l_qsr)   write(sbc_flfi(i_qsr)%file_name,   *) trim(nm_qsr_file),  trim(yyear),'01_reduced.nc'
+      if (l_qlw)   write(sbc_flfi(i_qlw)%file_name,   *) trim(nm_qlw_file),  trim(yyear),'01_reduced.nc'
+      if (l_tair)  write(sbc_flfi(i_tair)%file_name,  *) trim(nm_tair_file), trim(yyear),'01_reduced.nc'
+      if (l_prec)  write(sbc_flfi(i_prec)%file_name,  *) trim(nm_prec_file), trim(yyear),'01_reduced.nc'
+      if (l_snow)  write(sbc_flfi(i_snow)%file_name,  *) trim(nm_snow_file), trim(yyear),'01_reduced.nc'
+      if (l_mslp)  write(sbc_flfi(i_mslp)%file_name,  *) trim(nm_mslp_file), trim(yyear),'01_reduced.nc'
+      if (l_cloud) write(sbc_flfi(i_cloud)%file_name, *) trim(nm_cloud_file),trim(yyear),'01_reduced.nc'
 
       if (l_xwind) sbc_flfi(i_xwind)%file_name=ADJUSTL(trim(sbc_flfi(i_xwind)%file_name))
       if (l_ywind) sbc_flfi(i_ywind)%file_name=ADJUSTL(trim(sbc_flfi(i_ywind)%file_name))
