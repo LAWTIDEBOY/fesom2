@@ -25,28 +25,61 @@ module recom_diag
 #include "netcdf.inc"
   private
 
-  public :: ldiag_carbon, ldiag_silicate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq, total_carbon, total_silicate, &
-            compute_carbon_diag, compute_silicate_diag, write_recom_diag, compute_recom_diagnostics, precom_diag_list
+  public :: ldiag_carbon, ldiag_silicate, ldiag_nitrate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq, total_carbon_66N, total_silicate_66N, total_nitrate_66N, total_carbon_80N, total_silicate_80N, total_nitrate_80N, compute_carbon_diag, compute_silicate_diag, compute_nitrate_diag, write_recom_diag, compute_recom_diagnostics, precom_diag_list
 
-  real(kind=WP),  save,  target                 :: total_carbon
-  real(kind=WP),  save,  target                 :: valDIC
-  real(kind=WP),  save,  target                 :: valDOC
-  real(kind=WP),  save,  target                 :: valPhyC
-  real(kind=WP),  save,  target                 :: valDetC
-  real(kind=WP),  save,  target                 :: valHetC
-  real(kind=WP),  save,  target                 :: valDiaC
-  real(kind=WP),  save,  target                 :: valPhyCalc
-  real(kind=WP),  save,  target                 :: valDetCalc
-  real(kind=WP),  save,  target                 :: valDSi
-  real(kind=WP),  save,  target                 :: valDiaSi
-  real(kind=WP),  save,  target                 :: valDetSi
-  real(kind=WP),  save,  target                 :: valDetz2Si
-  real(kind=WP),  save,  target                 :: valBenSi
-
-  real(kind=WP),  save,  target                 :: total_silicate
+  real(kind=WP),  save,  target                 :: total_carbon_66N
+  real(kind=WP),  save,  target                 :: total_silicate_66N
+  real(kind=WP),  save,  target                 :: total_nitrate_66N
+  real(kind=WP),  save,  target                 :: valDIC_66N
+  real(kind=WP),  save,  target                 :: valDOC_66N
+  real(kind=WP),  save,  target                 :: valPhyC_66N
+  real(kind=WP),  save,  target                 :: valDetC_66N
+  real(kind=WP),  save,  target                 :: valHetC_66N
+  real(kind=WP),  save,  target                 :: valDiaC_66N
+  real(kind=WP),  save,  target                 :: valBenC_66N
+  real(kind=WP),  save,  target                 :: valPhyCalc_66N
+  real(kind=WP),  save,  target                 :: valDetCalc_66N
+  real(kind=WP),  save,  target                 :: valBenCalc_66N
+  real(kind=WP),  save,  target                 :: valDSi_66N
+  real(kind=WP),  save,  target                 :: valDiaSi_66N
+  real(kind=WP),  save,  target                 :: valDetSi_66N
+  real(kind=WP),  save,  target                 :: valBenSi_66N
+  real(kind=WP),  save,  target                 :: valDIN_66N
+  real(kind=WP),  save,  target                 :: valDON_66N
+  real(kind=WP),  save,  target                 :: valDiaN_66N
+  real(kind=WP),  save,  target                 :: valPhyN_66N
+  real(kind=WP),  save,  target                 :: valHetN_66N
+  real(kind=WP),  save,  target                 :: valDetN_66N
+  real(kind=WP),  save,  target                 :: valBenN_66N
+  
+  real(kind=WP),  save,  target                 :: total_silicate_80N
+  real(kind=WP),  save,  target                 :: total_nitrate_80N
+  real(kind=WP),  save,  target                 :: total_carbon_80N
+  real(kind=WP),  save,  target                 :: valDIC_80N
+  real(kind=WP),  save,  target                 :: valDOC_80N
+  real(kind=WP),  save,  target                 :: valPhyC_80N
+  real(kind=WP),  save,  target                 :: valDetC_80N
+  real(kind=WP),  save,  target                 :: valHetC_80N
+  real(kind=WP),  save,  target                 :: valDiaC_80N
+  real(kind=WP),  save,  target                 :: valBenC_80N
+  real(kind=WP),  save,  target                 :: valPhyCalc_80N
+  real(kind=WP),  save,  target                 :: valDetCalc_80N
+  real(kind=WP),  save,  target                 :: valBenCalc_80N
+  real(kind=WP),  save,  target                 :: valDSi_80N
+  real(kind=WP),  save,  target                 :: valDiaSi_80N
+  real(kind=WP),  save,  target                 :: valDetSi_80N
+  real(kind=WP),  save,  target                 :: valBenSi_80N
+  real(kind=WP),  save,  target                 :: valDIN_80N
+  real(kind=WP),  save,  target                 :: valDON_80N
+  real(kind=WP),  save,  target                 :: valDiaN_80N
+  real(kind=WP),  save,  target                 :: valPhyN_80N
+  real(kind=WP),  save,  target                 :: valHetN_80N
+  real(kind=WP),  save,  target                 :: valDetN_80N
+  real(kind=WP),  save,  target                 :: valBenN_80N
 
   logical                                       :: ldiag_carbon        =.true.
   logical                                       :: ldiag_silicate      =.true.
+  logical                                       :: ldiag_nitrate       =.true.
   integer                                       :: recom_diag_freq       = 1         !only required for d,h,s cases,  y, m take 1
   character                                     :: recom_diag_freq_unit  = 'm'        !output period: y,  d, h, s 
   integer                                       :: recom_logfile_outfreq = 120         !in logfile info. output frequency, # steps
@@ -54,7 +87,7 @@ module recom_diag
   real(kind=WP)                                 :: ctime !current time in seconds from the beginning of the year
   integer                                       :: row 
   
-  namelist /precom_diag_list/ ldiag_carbon, ldiag_silicate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq
+  namelist /precom_diag_list/ ldiag_carbon, ldiag_silicate, ldiag_nitrate, recom_diag_freq, recom_diag_freq_unit, recom_logfile_outfreq
 
   contains
 
@@ -69,75 +102,194 @@ module recom_diag
 ! ==============================================================
 subroutine compute_carbon_diag(mode,mesh)
 
+  use REcoM_declarations
+  use REcoM_LocVar
+  use REcoM_GloVar
+  use g_clock
+  use o_PARAM
+  USE o_ARRAYS
+  use g_PARSUP
+  use mod_MESH
+  use g_comm_auto
   implicit none
   integer, intent(in)        :: mode
   type(t_mesh), intent(in)  , target :: mesh
   logical, save              :: firstcall=.true.
+  integer                    :: k
+#include  "../associate_mesh.h"
+  
+  ind_arctic_66_3D = 1.0_WP
+  ind_arctic_66_2D = 1.0_WP
+  do k=1, myDim_nod2D+eDim_nod2D
+      if (geo_coord_nod2D(2,k) < 66*rad) then
+          ind_arctic_66_3D(:,k) = 0.0_WP
+          ind_arctic_66_2D(k) = 0.0_WP
+      end if
+  end do
+  
+  ind_arctic_80_3D = 1.0_WP
+  ind_arctic_80_2D = 1.0_WP
+  do k=1, myDim_nod2D+eDim_nod2D
+      if (geo_coord_nod2D(2,k) < 80*rad) then
+          ind_arctic_80_3D(:,k) = 0.0_WP
+          ind_arctic_80_2D(k) = 0.0_WP
+      end if
+  end do
 
   if (firstcall) then  !allocate the stuff at the first call
-    total_carbon=0.0
+    total_carbon_80N=0.0
+    total_carbon_66N=0.0
     firstcall=.false.
     if (mode==0) return
   end if
 
         ! DIC
-        call integrate_nod(tr_arr(:,:,4), valDIC, mesh)
-        total_carbon=total_carbon+valDIC
+        call integrate_nod(tr_arr(:,:,4)*ind_arctic_80_3D, valDIC_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valDIC_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of DIC at timestep :', mstep, valDIC
+           write(*,*) 'total integral of DIC (>80N) at timestep :', mstep, valDIC_80N
         end if
 
         ! DOC
-        call integrate_nod(tr_arr(:,:,14), valDOC, mesh)
-        total_carbon=total_carbon+valDOC
+        call integrate_nod(tr_arr(:,:,14)*ind_arctic_80_3D, valDOC_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valDOC_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of DOC at timestep :', mstep, valDOC
+           write(*,*) 'total integral of DOC (>80N) at timestep :', mstep, valDOC_80N
         end if
 
         !PhyC
-        call integrate_nod(tr_arr(:,:,7), valPhyC, mesh)
-        total_carbon=total_carbon+valPhyC
+        call integrate_nod(tr_arr(:,:,7)*ind_arctic_80_3D, valPhyC_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valPhyC_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of PhyC at timestep :', mstep, valPhyC
+           write(*,*) 'total integral of PhyC (>80N) at timestep :', mstep, valPhyC_80N
         end if
 
         !DetC
-        call integrate_nod(tr_arr(:,:,10), valDetC, mesh)
-        total_carbon=total_carbon+valDetC
+        call integrate_nod(tr_arr(:,:,10)*ind_arctic_80_3D+tr_arr(:,:,28)*ind_arctic_80_3D, valDetC_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valDetC_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of DetC at timestep :', mstep, valDetC
+           write(*,*) 'total integral of DetC+DetZ2C (>80N) at timestep :', mstep, valDetC_80N
         end if
 
         !HetC
-        call integrate_nod(tr_arr(:,:,12), valHetC, mesh)
-        total_carbon=total_carbon+valHetC
+        call integrate_nod(tr_arr(:,:,12)*ind_arctic_80_3D+tr_arr(:,:,26)*ind_arctic_80_3D, valHetC_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valHetC_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of HetC at timestep :', mstep, valHetC
+           write(*,*) 'total integral of HetC+Zoo2C (>80N) at timestep :', mstep, valHetC_80N
         end if
 
         !DiaC
-        call integrate_nod(tr_arr(:,:,16), valDiaC, mesh)
-        total_carbon=total_carbon+valDiaC
+        call integrate_nod(tr_arr(:,:,16)*ind_arctic_80_3D, valDiaC_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valDiaC_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of DiaC at timestep :', mstep, valDiaC
+           write(*,*) 'total integral of DiaC (>80N) at timestep :', mstep, valDiaC_80N
         end if
 
        !PhyCalc
-        call integrate_nod(tr_arr(:,:,22), valPhyCalc, mesh)
-        total_carbon=total_carbon+valPhyCalc
+        call integrate_nod(tr_arr(:,:,22)*ind_arctic_80_3D, valPhyCalc_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valPhyCalc_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of PhyCalc at timestep :', mstep, valPhyCalc
+           write(*,*) 'total integral of PhyCalc (>80N) at timestep :', mstep, valPhyCalc_80N
         end if
 
         !DetCalc
-        call integrate_nod(tr_arr(:,:,23), valDetCalc, mesh)
-        total_carbon=total_carbon+valDetCalc
+        call integrate_nod(tr_arr(:,:,23)*ind_arctic_80_3D+tr_arr(:,:,30)*ind_arctic_80_3D, valDetCalc_80N, mesh)
+        total_carbon_80N=total_carbon_80N+valDetCalc_80N
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of DetCalc at timestep :', mstep, valDetCalc
+           write(*,*) 'total integral of DetCalc+DetZ2Calc (>80N) at timestep :', mstep, valDetCalc_80N
         end if
+        
+        !BenC
+!        call integrate_nod(Benthos(:,3), valBenSi, mesh)
+         call integrate_bottom(valBenC_80N*ind_arctic_80_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenC at timestep :', mstep, valBenC_80N
+        total_carbon_80N=total_carbon_80N+valBenC_80N
+        
+        !BenCalc
+!        call integrate_nod(Benthos(:,3), valBenSi, mesh)
+         call integrate_bottom(valBenCalc_80N*ind_arctic_80_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenCalc at timestep :', mstep, valBenCalc_80N
+        total_carbon_80N=total_carbon_80N+valBenCalc_80N
 
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
-           write(*,*) 'total integral of carbon at timestep :', mstep, total_carbon
+           write(*,*) 'total integral of carbon (>80N) at timestep :', mstep, total_carbon_80N
+        end if
+        
+        
+        
+        
+        
+        
+        ! DIC
+        call integrate_nod(tr_arr(:,:,4)*ind_arctic_66_3D, valDIC_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valDIC_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of DIC (>66N) at timestep :', mstep, valDIC_66N
+        end if
+
+        ! DOC
+        call integrate_nod(tr_arr(:,:,14)*ind_arctic_66_3D, valDOC_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valDOC_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of DOC (>66N) at timestep :', mstep, valDOC_66N
+        end if
+
+        !PhyC
+        call integrate_nod(tr_arr(:,:,7)*ind_arctic_66_3D, valPhyC_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valPhyC_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of PhyC (>66N) at timestep :', mstep, valPhyC_66N
+        end if
+
+        !DetC
+        call integrate_nod(tr_arr(:,:,10)*ind_arctic_66_3D+tr_arr(:,:,28)*ind_arctic_66_3D, valDetC_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valDetC_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of DetC+DetZ2C (>66N) at timestep :', mstep, valDetC_66N
+        end if
+
+        !HetC
+        call integrate_nod(tr_arr(:,:,12)*ind_arctic_66_3D+tr_arr(:,:,26)*ind_arctic_66_3D, valHetC_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valHetC_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of HetC+Zoo2C (>66N) at timestep :', mstep, valHetC_66N
+        end if
+
+        !DiaC
+        call integrate_nod(tr_arr(:,:,16)*ind_arctic_66_3D, valDiaC_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valDiaC_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of DiaC (>66N) at timestep :', mstep, valDiaC_66N
+        end if
+
+       !PhyCalc
+        call integrate_nod(tr_arr(:,:,22)*ind_arctic_66_3D, valPhyCalc_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valPhyCalc_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of PhyCalc (>80N) at timestep :', mstep, valPhyCalc_66N
+        end if
+
+        !DetCalc
+        call integrate_nod(tr_arr(:,:,23)*ind_arctic_66_3D+tr_arr(:,:,30)*ind_arctic_66_3D, valDetCalc_66N, mesh)
+        total_carbon_66N=total_carbon_66N+valDetCalc_66N
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of DetCalc+DetZ2Calc (>66N) at timestep :', mstep, valDetCalc_66N
+        end if
+        
+        !BenC
+!        call integrate_nod(Benthos(:,3), valBenSi, mesh)
+         call integrate_bottom(valBenC_66N*ind_arctic_66_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of BenC at timestep :', mstep, valBenC_66N
+        total_carbon_66N=total_carbon_66N+valBenC_66N
+        
+        !BenCalc
+!        call integrate_nod(Benthos(:,3), valBenSi, mesh)
+         call integrate_bottom(valBenCalc_66N*ind_arctic_66_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenCalc at timestep :', mstep, valBenCalc_66N
+        total_carbon_66N=total_carbon_66N+valBenCalc_66N
+
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) then
+           write(*,*) 'total integral of carbon (>66N) at timestep :', mstep, total_carbon_66N
         end if
 
 end subroutine compute_carbon_diag
@@ -179,41 +331,183 @@ subroutine compute_silicate_diag(mode,mesh)
   end do
 
   if (firstcall) then  !allocate the stuff at the first call
-    total_silicate=0.0 ! accumulates
+    total_silicate_80N=0.0 ! accumulates
+    total_silicate_66N=0.0 ! accumulates
     firstcall=.false.
     if (mode==0) return
   end if
 
         !DSi
-        call integrate_nod(tr_arr(:,:,20)*ind_arctic_80_3D, valDSi, mesh)
-        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DSi at timestep :', mstep, valDSi
-        total_silicate=total_silicate+valDSi
+        call integrate_nod(tr_arr(:,:,20)*ind_arctic_80_3D, valDSi_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DSi at timestep :', mstep, valDSi_80N
+        total_silicate_80N=total_silicate_80N+valDSi_80N
 
         !DiaSi
-        call integrate_nod(tr_arr(:,:,18)*ind_arctic_80_3D, valDiaSi, mesh)
-        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DiaSi at timestep :', mstep, valDiaSi
-        total_silicate=total_silicate+valDiaSi
+        call integrate_nod(tr_arr(:,:,18)*ind_arctic_80_3D, valDiaSi_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DiaSi at timestep :', mstep, valDiaSi_80N
+        total_silicate_80N=total_silicate_80N+valDiaSi_80N
 
         !DetSi
-        call integrate_nod(tr_arr(:,:,19)*ind_arctic_80_3D, valDetSi, mesh)
-        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DetSi at timestep :', mstep, valDetSi
-        total_silicate=total_silicate+valDetSi
+        call integrate_nod(tr_arr(:,:,19)*ind_arctic_80_3D+tr_arr(:,:,29)*ind_arctic_80_3D, valDetSi_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DetSi+Detz2Si at timestep :', mstep, valDetSi_80N
+        total_silicate_80N=total_silicate_80N+valDetSi_80N
 
-!if (REcoM_Second_Zoo) then
-        !Detz2Si
-        call integrate_nod(tr_arr(:,:,29)*ind_arctic_80_3D, valDetz2Si, mesh)
-        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of Detz2Si at timestep :', mstep, valDetSi
-        total_silicate=total_silicate+valDetz2Si
-!end if 
         !BenSi
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenSi*ind_arctic_80_2D,mesh)
-        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenSi at timestep :', mstep, valBenSi
-        total_silicate=total_silicate+valBenSi
+         call integrate_bottom(valBenSi_80N*ind_arctic_80_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenSi at timestep :', mstep, valBenSi_80N
+        total_silicate_80N=total_silicate_80N+valBenSi_80N
 
-        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of silicate at timestep :', mstep, total_silicate
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of silicate at timestep :', mstep, total_silicate_80N
+        
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        !DSi
+        call integrate_nod(tr_arr(:,:,20)*ind_arctic_66_3D, valDSi_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of DSi at timestep :', mstep, valDSi_80N
+        total_silicate_80N=total_silicate_80N+valDSi_80N
+
+        !DiaSi
+        call integrate_nod(tr_arr(:,:,18)*ind_arctic_66_3D, valDiaSi_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of DiaSi at timestep :', mstep, valDiaSi_66N
+        total_silicate_66N=total_silicate_66N+valDiaSi_66N
+
+        !DetSi
+        call integrate_nod(tr_arr(:,:,19)*ind_arctic_66_3D+tr_arr(:,:,29)*ind_arctic_66_3D, valDetSi_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of DetSi+Detz2Si at timestep :', mstep, valDetSi_66N
+        total_silicate_66N=total_silicate_66N+valDetSi_66N
+
+        !BenSi
+!        call integrate_nod(Benthos(:,3), valBenSi, mesh)
+         call integrate_bottom(valBenSi_66N*ind_arctic_66_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of BenSi at timestep :', mstep, valBenSi_66N
+        total_silicate_66N=total_silicate_66N+valBenSi_66N
+
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of silicate at timestep :', mstep, total_silicate_66N
 
 end subroutine compute_silicate_diag
+
+
+subroutine compute_nitrate_diag(mode,mesh)
+  use REcoM_declarations
+  use REcoM_LocVar
+  use REcoM_GloVar
+  use g_clock
+  use o_PARAM
+  USE o_ARRAYS
+  use g_PARSUP
+  use mod_MESH
+  use g_comm_auto
+  implicit none
+  integer, intent(in)        :: mode
+  type(t_mesh), intent(in)  , target :: mesh
+  logical, save              :: firstcall=.true.
+  integer                    :: k
+#include  "../associate_mesh.h"
+  
+  ind_arctic_66_3D = 1.0_WP
+  ind_arctic_66_2D = 1.0_WP
+  do k=1, myDim_nod2D+eDim_nod2D
+      if (geo_coord_nod2D(2,k) < 66*rad) then
+          ind_arctic_66_3D(:,k) = 0.0_WP
+          ind_arctic_66_2D(k) = 0.0_WP
+      end if
+  end do
+  
+  ind_arctic_80_3D = 1.0_WP
+  ind_arctic_80_2D = 1.0_WP
+  do k=1, myDim_nod2D+eDim_nod2D
+      if (geo_coord_nod2D(2,k) < 80*rad) then
+          ind_arctic_80_3D(:,k) = 0.0_WP
+          ind_arctic_80_2D(k) = 0.0_WP
+      end if
+  end do
+
+  if (firstcall) then  !allocate the stuff at the first call
+    total_nitrate_80N=0.0 ! accumulates
+    total_nitrate_66N=0.0 ! accumulates
+    firstcall=.false.
+    if (mode==0) return
+  end if
+
+        !DIN
+        call integrate_nod(tr_arr(:,:,3)*ind_arctic_80_3D, valDIN_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DIN at timestep :', mstep, valDIN_80N
+        total_nitrate_80N=total_nitrate_80N+valDIN_80N
+        
+        ! DON
+        call integrate_nod(tr_arr(:,:,13)*ind_arctic_80_3D, valDON_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DON at timestep :', mstep, valDON_80N
+        total_nitrate_80N=total_nitrate_80N+valDON_80N
+
+        !DiaN
+        call integrate_nod(tr_arr(:,:,15)*ind_arctic_80_3D, valDiaN_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DiaN at timestep :', mstep, valDiaN_80N
+        total_nitrate_80N=total_nitrate_80N+valDiaN_80N
+        
+        !PhyN
+        call integrate_nod(tr_arr(:,:,6)*ind_arctic_80_3D, valPhyN_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of PhyN at timestep :', mstep, valPhyN_80N
+        total_nitrate_80N=total_nitrate_80N+valPhyN_80N
+        
+        !HetN
+        call integrate_nod(tr_arr(:,:,11)*ind_arctic_80_3D+tr_arr(:,:,25)*ind_arctic_80_3D, valHetN_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of Zoo2N+HetN at timestep :', mstep, valHetN_80N
+        total_nitrate_80N=total_nitrate_80N+valHetN_80N
+
+        !DetN
+        call integrate_nod(tr_arr(:,:,9)*ind_arctic_80_3D+tr_arr(:,:,27)*ind_arctic_80_3D, valDetN_80N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DetZ2N+DetN at timestep :', mstep, valDetN_80N
+        total_nitrate_80N=total_nitrate_80N+valDetN_80N
+
+        !BenN
+!        call integrate_nod(Benthos(:,3), valBenSi, mesh)
+         call integrate_bottom(valBenN_80N*ind_arctic_80_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenN at timestep :', mstep, valBenN_80N
+        total_nitrate_80N=total_nitrate_80N+valBenN_80N
+
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of nitrate at timestep :', mstep, total_nitrate_80N
+        
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        !DIN
+        call integrate_nod(tr_arr(:,:,3)*ind_arctic_66_3D, valDIN_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of DIN at timestep :', mstep, valDIN_66N
+        total_nitrate_66N=total_nitrate_66N+valDIN_66N
+        
+        ! DON
+        call integrate_nod(tr_arr(:,:,13)*ind_arctic_66_3D, valDON_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of DON at timestep :', mstep, valDON_66N
+        total_nitrate_66N=total_nitrate_66N+valDON_66N
+
+        !DiaN
+        call integrate_nod(tr_arr(:,:,15)*ind_arctic_66_3D, valDiaN_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of DiaN at timestep :', mstep, valDiaN_66N
+        total_nitrate_66N=total_nitrate_66N+valDiaN_66N
+
+        !PhyN
+        call integrate_nod(tr_arr(:,:,6)*ind_arctic_66_3D, valPhyN_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of PhyN at timestep :', mstep, valPhyN_66N
+        total_nitrate_66N=total_nitrate_66N+valPhyN_66N
+        
+        !HetN
+        call integrate_nod(tr_arr(:,:,11)*ind_arctic_66_3D+tr_arr(:,:,25)*ind_arctic_66_3D, valHetN_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of Zoo2N+HetN at timestep :', mstep, valHetN_66N
+        total_nitrate_66N=total_nitrate_66N+valHetN_66N
+
+        !DetN
+        call integrate_nod(tr_arr(:,:,9)*ind_arctic_66_3D+tr_arr(:,:,27)*ind_arctic_66_3D, valDetN_66N, mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of DetZ2N+DetN at timestep :', mstep, valDetN_80N
+        total_nitrate_66N=total_nitrate_66N+valDetN_66N
+!end if 
+        !BenN
+!        call integrate_nod(Benthos(:,3), valBenSi, mesh)
+         call integrate_bottom(valBenN_66N*ind_arctic_66_2D,mesh)
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of BenN at timestep :', mstep, valBenN_66N
+        total_nitrate_66N=total_nitrate_66N+valBenN_66N
+
+        if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of nitrate at timestep :', mstep, total_nitrate_66N
+
+end subroutine compute_nitrate_diag
+
 
 ! ==============================================================
 subroutine write_recom_diag(mode, mesh)
@@ -221,9 +515,13 @@ subroutine write_recom_diag(mode, mesh)
   implicit none
   integer                            :: status, ncid, j, k
   character(2000)                    :: filename
-  integer                            :: recID, tID, tcID, tsID, tsdelID
-  integer                            :: valDICID, valDOCID, valPhyCID, valDetCID, valHetCID, valDiaCID, valPhyCalcID, valDetCalcID
-  integer                            :: valDSiID, valDiaSiID, valDetSiID, valDetz2SiID, valBenSiID
+  integer                            :: recID, tID, tcID_66N, tsID_66N, tsdelID, tnID_66N,  tcID_80N, tsID_80N, tnID_80N
+  integer                            :: valDICID_66N, valDOCID_66N, valPhyCID_66N, valDetCID_66N, valHetCID_66N, valDiaCID_66N, valPhyCalcID_66N, valDetCalcID_66N, valBenCID_66N, valBenCalcID_66N
+  integer                            :: valDICID_80N, valDOCID_80N, valPhyCID_80N, valDetCID_80N, valHetCID_80N, valDiaCID_80N, valPhyCalcID_80N, valDetCalcID_80N, valBenCID_80N, valBenCalcID_80N
+  integer                            :: valDSiID_66N, valDiaSiID_66N, valDetSiID_66N, valBenSiID_66N
+  integer                            :: valDSiID_80N, valDiaSiID_80N, valDetSiID_80N, valBenSiID_80N
+  integer                            :: valDINID_66N, valDONID_66N, valDiaNID_66N, valDetNID_66N, valDetz2NID_66N, valBenNID_66N, valPhyNID_66N, valHetNID_66N
+  integer                            :: valDINID_80N, valDONID_80N, valDiaNID_80N, valDetNID_80N, valDetz2NID_80N, valBenNID_80N, valPhyNID_80N, valHetNID_80N
   integer                            :: rec_count=0
   character(2000)                    :: att_text
   real(real64)                       :: rtime !timestamp of the record
@@ -273,24 +571,57 @@ subroutine write_recom_diag(mode, mesh)
      status = nf_def_dim(ncid, 'time', NF_UNLIMITED, recID)
 !! define variables
      status = nf_def_var(ncid, 'time', NF_DOUBLE, 1, recID, tID)
-     status = nf_def_var(ncid, 'total_carbon', NF_DOUBLE, 1, recID, tcID)
-     status = nf_def_var(ncid, 'total_DIC', NF_DOUBLE, 1, recID, valDICID)
-     status = nf_def_var(ncid, 'total_DOC', NF_DOUBLE, 1, recID, valDOCID)
-     status = nf_def_var(ncid, 'total_PhyC', NF_DOUBLE, 1, recID, valPhyCID)
-     status = nf_def_var(ncid, 'total_DetC', NF_DOUBLE, 1, recID, valDetCID)
-     status = nf_def_var(ncid, 'total_HetC', NF_DOUBLE, 1, recID, valHetCID)
-     status = nf_def_var(ncid, 'total_DiaC', NF_DOUBLE, 1, recID, valDiaCID)
-     status = nf_def_var(ncid, 'total_PhyCalc', NF_DOUBLE, 1, recID, valPhyCalcID)
-     status = nf_def_var(ncid, 'total_DetCalc', NF_DOUBLE, 1, recID, valDetCalcID)
-
-     status = nf_def_var(ncid, 'total_silicate', NF_DOUBLE, 1, recID, tsID)
-
-     status = nf_def_var(ncid, 'total_DSi', NF_DOUBLE, 1, recID, valDSiID)
-     status = nf_def_var(ncid, 'total_DiaSi', NF_DOUBLE, 1, recID, valDiaSiID)
-     status = nf_def_var(ncid, 'total_DetSi', NF_DOUBLE, 1, recID, valDetSiID)
-     status = nf_def_var(ncid, 'total_Detz2Si', NF_DOUBLE, 1, recID, valDetz2SiID)
-     status = nf_def_var(ncid, 'total_BenSi', NF_DOUBLE, 1, recID, valBenSiID)
-
+     status = nf_def_var(ncid, 'total_carbon_66N', NF_DOUBLE, 1, recID, tcID_66N)
+     status = nf_def_var(ncid, 'total_DIC_66N', NF_DOUBLE, 1, recID, valDICID_66N)
+     status = nf_def_var(ncid, 'total_DOC_66N', NF_DOUBLE, 1, recID, valDOCID_66N)
+     status = nf_def_var(ncid, 'total_PhyC_66N', NF_DOUBLE, 1, recID, valPhyCID_66N)
+     status = nf_def_var(ncid, 'total_DetC_66N', NF_DOUBLE, 1, recID, valDetCID_66N)
+     status = nf_def_var(ncid, 'total_HetC_66N', NF_DOUBLE, 1, recID, valHetCID_66N)
+     status = nf_def_var(ncid, 'total_DiaC_66N', NF_DOUBLE, 1, recID, valDiaCID_66N)
+     status = nf_def_var(ncid, 'total_PhyCalc_66N', NF_DOUBLE, 1, recID, valPhyCalcID_66N)
+     status = nf_def_var(ncid, 'total_DetCalc_66N', NF_DOUBLE, 1, recID, valDetCalcID_66N)
+     status = nf_def_var(ncid, 'total_BenCalc_66N', NF_DOUBLE, 1, recID, valBenCalcID_66N)
+     status = nf_def_var(ncid, 'total_BenC_66N', NF_DOUBLE, 1, recID, valBenCID_66N)
+     
+     status = nf_def_var(ncid, 'total_carbon_80N', NF_DOUBLE, 1, recID, tcID_80N)
+     status = nf_def_var(ncid, 'total_DIC_80N', NF_DOUBLE, 1, recID, valDICID_80N)
+     status = nf_def_var(ncid, 'total_DOC_80N', NF_DOUBLE, 1, recID, valDOCID_80N)
+     status = nf_def_var(ncid, 'total_PhyC_80N', NF_DOUBLE, 1, recID, valPhyCID_80N)
+     status = nf_def_var(ncid, 'total_DetC_80N', NF_DOUBLE, 1, recID, valDetCID_80N)
+     status = nf_def_var(ncid, 'total_HetC_80N', NF_DOUBLE, 1, recID, valHetCID_80N)
+     status = nf_def_var(ncid, 'total_DiaC_80N', NF_DOUBLE, 1, recID, valDiaCID_80N)
+     status = nf_def_var(ncid, 'total_PhyCalc_80N', NF_DOUBLE, 1, recID, valPhyCalcID_80N)
+     status = nf_def_var(ncid, 'total_DetCalc_80N', NF_DOUBLE, 1, recID, valDetCalcID_80N)
+     status = nf_def_var(ncid, 'total_BenCalc_80N', NF_DOUBLE, 1, recID, valBenCalcID_80N)
+     status = nf_def_var(ncid, 'total_BenC_80N', NF_DOUBLE, 1, recID, valBenCID_80N)
+     
+     status = nf_def_var(ncid, 'total_silicate_66N', NF_DOUBLE, 1, recID, tsID_66N)
+     status = nf_def_var(ncid, 'total_DSi_66N', NF_DOUBLE, 1, recID, valDSiID_66N)
+     status = nf_def_var(ncid, 'total_DiaSi_66N', NF_DOUBLE, 1, recID, valDiaSiID_66N)
+     status = nf_def_var(ncid, 'total_DetSi_66N', NF_DOUBLE, 1, recID, valDetSiID_66N)
+     status = nf_def_var(ncid, 'total_BenSi_66N', NF_DOUBLE, 1, recID, valBenSiID_66N)
+     status = nf_def_var(ncid, 'total_silicate_80N', NF_DOUBLE, 1, recID, tsID_80N)
+     status = nf_def_var(ncid, 'total_DSi_80N', NF_DOUBLE, 1, recID, valDSiID_80N)
+     status = nf_def_var(ncid, 'total_DiaSi_80N', NF_DOUBLE, 1, recID, valDiaSiID_80N)
+     status = nf_def_var(ncid, 'total_DetSi_80N', NF_DOUBLE, 1, recID, valDetSiID_80N)
+     status = nf_def_var(ncid, 'total_BenSi_80N', NF_DOUBLE, 1, recID, valBenSiID_80N)
+     
+     status = nf_def_var(ncid, 'total_nitrate_66N', NF_DOUBLE, 1, recID, tnID_66N)
+     status = nf_def_var(ncid, 'total_DIN_66N', NF_DOUBLE, 1, recID, valDINID_66N)
+     status = nf_def_var(ncid, 'total_DON_66N', NF_DOUBLE, 1, recID, valDONID_66N)
+     status = nf_def_var(ncid, 'total_DiaN_66N', NF_DOUBLE, 1, recID, valDiaNID_66N)
+     status = nf_def_var(ncid, 'total_DetN_66N', NF_DOUBLE, 1, recID, valDetNID_66N)
+     status = nf_def_var(ncid, 'total_BenN_66N', NF_DOUBLE, 1, recID, valBenNID_66N)
+     status = nf_def_var(ncid, 'total_PhyN_66N', NF_DOUBLE, 1, recID, valPhyNID_66N)
+     status = nf_def_var(ncid, 'total_HetN_66N', NF_DOUBLE, 1, recID, valHetNID_66N)
+     status = nf_def_var(ncid, 'total_nitrate_80N', NF_DOUBLE, 1, recID, tnID_80N)
+     status = nf_def_var(ncid, 'total_DIN_80N', NF_DOUBLE, 1, recID, valDINID_80N)
+     status = nf_def_var(ncid, 'total_DON_80N', NF_DOUBLE, 1, recID, valDONID_80N)
+     status = nf_def_var(ncid, 'total_DiaN_80N', NF_DOUBLE, 1, recID, valDiaNID_80N)
+     status = nf_def_var(ncid, 'total_DetN_80N', NF_DOUBLE, 1, recID, valDetNID_80N)
+     status = nf_def_var(ncid, 'total_BenN_80N', NF_DOUBLE, 1, recID, valBenNID_80N)
+     status = nf_def_var(ncid, 'total_PhyN_80N', NF_DOUBLE, 1, recID, valPhyNID_80N)
+     status = nf_def_var(ncid, 'total_HetN_80N', NF_DOUBLE, 1, recID, valHetNID_80N)
 
 !! add attributes
      att_text='time'
@@ -314,24 +645,60 @@ if (do_output) then
   status = nf_inq_dimlen(ncid, recID, rec_count)
 
   status = nf_inq_varid(ncid, 'time', tID)
-  status = nf_inq_varid(ncid, 'total_carbon', tcID)
+  
+  status = nf_inq_varid(ncid, 'total_carbon_80N', tcID_80N)
+  status = nf_inq_varid(ncid, 'total_DIC_80N', valDICID_80N)
+  status = nf_inq_varid(ncid, 'total_DOC_80N', valDOCID_80N)
+  status = nf_inq_varid(ncid, 'total_PhyC_80N', valPhyCID_80N)
+  status = nf_inq_varid(ncid, 'total_DetC_80N', valDetCID_80N)
+  status = nf_inq_varid(ncid, 'total_HetC_80N', valHetCID_80N)
+  status = nf_inq_varid(ncid, 'total_DiaC_80N', valDiaCID_80N)
+  status = nf_inq_varid(ncid, 'total_BenC_80N', valBenCID_80N)
+  status = nf_inq_varid(ncid, 'total_BenCalc_80N', valBenCalcID_80N)
+  status = nf_inq_varid(ncid, 'total_PhyCalc_80N', valPhyCalcID_80N)
+  status = nf_inq_varid(ncid, 'total_DetCalc_80N', valDetCalcID_80N)
+  
+  status = nf_inq_varid(ncid, 'total_carbon_66N', tcID_66N)
+  status = nf_inq_varid(ncid, 'total_DIC_66N', valDICID_66N)
+  status = nf_inq_varid(ncid, 'total_DOC_66N', valDOCID_66N)
+  status = nf_inq_varid(ncid, 'total_PhyC_66N', valPhyCID_66N)
+  status = nf_inq_varid(ncid, 'total_DetC_66N', valDetCID_66N)
+  status = nf_inq_varid(ncid, 'total_HetC_66N', valHetCID_66N)
+  status = nf_inq_varid(ncid, 'total_DiaC_66N', valDiaCID_66N)
+  status = nf_inq_varid(ncid, 'total_BenC_66N', valBenCID_66N)
+  status = nf_inq_varid(ncid, 'total_BenCalc_66N', valBenCalcID_66N)
+  status = nf_inq_varid(ncid, 'total_PhyCalc_66N', valPhyCalcID_66N)
+  status = nf_inq_varid(ncid, 'total_DetCalc_66N', valDetCalcID_66N)
 
-  status = nf_inq_varid(ncid, 'total_DIC', valDICID)
-  status = nf_inq_varid(ncid, 'total_DOC', valDOCID)
-  status = nf_inq_varid(ncid, 'total_PhyC', valPhyCID)
-  status = nf_inq_varid(ncid, 'total_DetC', valDetCID)
-  status = nf_inq_varid(ncid, 'total_HetC', valHetCID)
-  status = nf_inq_varid(ncid, 'total_DiaC', valDiaCID)
-  status = nf_inq_varid(ncid, 'total_PhyCalc', valPhyCalcID)
-  status = nf_inq_varid(ncid, 'total_DetCalc', valDetCalcID)
-
-  status = nf_inq_varid(ncid, 'total_silicate', tsID)
-
-  status = nf_inq_varid(ncid, 'total_DSi', valDSiID)
-  status = nf_inq_varid(ncid, 'total_DiaSi', valDiaSiID)
-  status = nf_inq_varid(ncid, 'total_DetSi', valDetSiID)
-  status = nf_inq_varid(ncid, 'total_Detz2Si', valDetz2SiID)
-  status = nf_inq_varid(ncid, 'total_BenSi', valBenSiID)
+  status = nf_inq_varid(ncid, 'total_silicate_80N', tsID_80N)
+  status = nf_inq_varid(ncid, 'total_DSi_80N', valDSiID_80N)
+  status = nf_inq_varid(ncid, 'total_DiaSi_80N', valDiaSiID_80N)
+  status = nf_inq_varid(ncid, 'total_DetSi_80N', valDetSiID_80N)
+  status = nf_inq_varid(ncid, 'total_BenSi_80N', valBenSiID_80N)
+  
+  status = nf_inq_varid(ncid, 'total_silicate_66N', tsID_66N)
+  status = nf_inq_varid(ncid, 'total_DSi_66N', valDSiID_66N)
+  status = nf_inq_varid(ncid, 'total_DiaSi_66N', valDiaSiID_66N)
+  status = nf_inq_varid(ncid, 'total_DetSi_66N', valDetSiID_66N)
+  status = nf_inq_varid(ncid, 'total_BenSi_66N', valBenSiID_66N)
+  
+  status = nf_inq_varid(ncid, 'total_nitrate_66N', tnID_66N)
+  status = nf_inq_varid(ncid, 'total_DIN_66N', valDINID_66N)
+  status = nf_inq_varid(ncid, 'total_DON_66N', valDONID_66N)
+  status = nf_inq_varid(ncid, 'total_DiaN_66N', valDiaNID_66N)
+  status = nf_inq_varid(ncid, 'total_DetN_66N', valDetNID_66N)
+  status = nf_inq_varid(ncid, 'total_BenN_66N', valBenNID_66N)
+  status = nf_inq_varid(ncid, 'total_PhyN_66N', valPhyNID_66N)
+  status = nf_inq_varid(ncid, 'total_HetN_66N', valHetNID_66N)
+  
+  status = nf_inq_varid(ncid, 'total_nitrate_80N', tnID_80N)
+  status = nf_inq_varid(ncid, 'total_DIN_80N', valDINID_80N)
+  status = nf_inq_varid(ncid, 'total_DON_80N', valDONID_80N)
+  status = nf_inq_varid(ncid, 'total_DiaN_80N', valDiaNID_80N)
+  status = nf_inq_varid(ncid, 'total_DetN_80N', valDetNID_80N)
+  status = nf_inq_varid(ncid, 'total_BenN_80N', valBenNID_80N)
+  status = nf_inq_varid(ncid, 'total_PhyN_80N', valPhyNID_80N)
+  status = nf_inq_varid(ncid, 'total_HetN_80N', valHetNID_80N)
 
   do k=rec_count, 1, -1
      status=nf_get_vara_double(ncid, tID, k, 1, rtime, 1);
@@ -350,23 +717,56 @@ if (do_output) then
   rec_count=max(rec_count, 1)
 
   status = nf_put_vara_double(ncid, tID, rec_count, 1, ctime, 1)
-  status = nf_put_vara_double(ncid, tcID, rec_count, 1, total_carbon, 1)
-  status = nf_put_vara_double(ncid, valDICID, rec_count, 1, valDIC, 1)
-  status = nf_put_vara_double(ncid, valDOCID, rec_count, 1, valDOC, 1)
-  status = nf_put_vara_double(ncid, valPhyCID, rec_count, 1, valPhyC, 1)
-  status = nf_put_vara_double(ncid, valDetCID, rec_count, 1, valDetC, 1)
-  status = nf_put_vara_double(ncid, valHetCID, rec_count, 1, valHetC, 1)
-  status = nf_put_vara_double(ncid, valDiaCID, rec_count, 1, valDiaC, 1)
-  status = nf_put_vara_double(ncid, valPhyCalcID, rec_count, 1, valPhyCalc, 1)
-  status = nf_put_vara_double(ncid, valDetCalcID, rec_count, 1, valDetCalc, 1)
+  
+  status = nf_put_vara_double(ncid, tcID_66N, rec_count, 1, total_carbon_66N, 1)
+  status = nf_put_vara_double(ncid, valDICID_66N, rec_count, 1, valDIC_66N, 1)
+  status = nf_put_vara_double(ncid, valDOCID_66N, rec_count, 1, valDOC_66N, 1)
+  status = nf_put_vara_double(ncid, valPhyCID_66N, rec_count, 1, valPhyC_66N, 1)
+  status = nf_put_vara_double(ncid, valDetCID_66N, rec_count, 1, valDetC_66N, 1)
+  status = nf_put_vara_double(ncid, valHetCID_66N, rec_count, 1, valHetC_66N, 1)
+  status = nf_put_vara_double(ncid, valDiaCID_66N, rec_count, 1, valDiaC_66N, 1)
+  status = nf_put_vara_double(ncid, valPhyCalcID_66N, rec_count, 1, valPhyCalc_66N, 1)
+  status = nf_put_vara_double(ncid, valDetCalcID_66N, rec_count, 1, valDetCalc_66N, 1)
+  
+  status = nf_put_vara_double(ncid, tcID_80N, rec_count, 1, total_carbon_80N, 1)
+  status = nf_put_vara_double(ncid, valDICID_80N, rec_count, 1, valDIC_80N, 1)
+  status = nf_put_vara_double(ncid, valDOCID_80N, rec_count, 1, valDOC_80N, 1)
+  status = nf_put_vara_double(ncid, valPhyCID_80N, rec_count, 1, valPhyC_80N, 1)
+  status = nf_put_vara_double(ncid, valDetCID_80N, rec_count, 1, valDetC_80N, 1)
+  status = nf_put_vara_double(ncid, valHetCID_80N, rec_count, 1, valHetC_80N, 1)
+  status = nf_put_vara_double(ncid, valDiaCID_80N, rec_count, 1, valDiaC_80N, 1)
+  status = nf_put_vara_double(ncid, valPhyCalcID_80N, rec_count, 1, valPhyCalc_80N, 1)
+  status = nf_put_vara_double(ncid, valDetCalcID_80N, rec_count, 1, valDetCalc_80N, 1)
 
-  status = nf_put_vara_double(ncid, tsID, rec_count, 1, total_silicate, 1)
-
-  status = nf_put_vara_double(ncid, valDSiID, rec_count, 1, valDSi, 1)
-  status = nf_put_vara_double(ncid, valDiaSiID, rec_count, 1, valDiaSi, 1)
-  status = nf_put_vara_double(ncid, valDetSiID, rec_count, 1, valDetSi, 1)
-  status = nf_put_vara_double(ncid, valDetz2SiID, rec_count, 1, valDetz2Si, 1)
-  status = nf_put_vara_double(ncid, valBenSiID, rec_count, 1, valBenSi, 1)
+  status = nf_put_vara_double(ncid, tsID_66N, rec_count, 1, total_silicate_66N, 1)
+  status = nf_put_vara_double(ncid, valDSiID_66N, rec_count, 1, valDSi_66N, 1)
+  status = nf_put_vara_double(ncid, valDiaSiID_66N, rec_count, 1, valDiaSi_66N, 1)
+  status = nf_put_vara_double(ncid, valDetSiID_66N, rec_count, 1, valDetSi_66N, 1)
+  status = nf_put_vara_double(ncid, valBenSiID_66N, rec_count, 1, valBenSi_66N, 1)
+  
+  status = nf_put_vara_double(ncid, tsID_80N, rec_count, 1, total_silicate_80N, 1)
+  status = nf_put_vara_double(ncid, valDSiID_80N, rec_count, 1, valDSi_80N, 1)
+  status = nf_put_vara_double(ncid, valDiaSiID_80N, rec_count, 1, valDiaSi_80N, 1)
+  status = nf_put_vara_double(ncid, valDetSiID_80N, rec_count, 1, valDetSi_80N, 1)
+  status = nf_put_vara_double(ncid, valBenSiID_80N, rec_count, 1, valBenSi_80N, 1)
+  
+  status = nf_put_vara_double(ncid, tnID_66N, rec_count, 1, total_nitrate_66N, 1)
+  status = nf_put_vara_double(ncid, valDINID_66N, rec_count, 1, valDIN_66N, 1)
+  status = nf_put_vara_double(ncid, valDONID_66N, rec_count, 1, valDON_66N, 1)
+  status = nf_put_vara_double(ncid, valDiaNID_66N, rec_count, 1, valDiaN_66N, 1)
+  status = nf_put_vara_double(ncid, valDetNID_66N, rec_count, 1, valDetN_66N, 1)
+  status = nf_put_vara_double(ncid, valBenNID_66N, rec_count, 1, valBenN_66N, 1)
+  status = nf_put_vara_double(ncid, valPhyNID_66N, rec_count, 1, valPhyN_66N, 1)
+  status = nf_put_vara_double(ncid, valHetNID_66N, rec_count, 1, valHetN_66N, 1)
+  
+  status = nf_put_vara_double(ncid, tnID_80N, rec_count, 1, total_nitrate_80N, 1)
+  status = nf_put_vara_double(ncid, valDINID_80N, rec_count, 1, valDIN_80N, 1)
+  status = nf_put_vara_double(ncid, valDONID_80N, rec_count, 1, valDON_80N, 1)
+  status = nf_put_vara_double(ncid, valDiaNID_80N, rec_count, 1, valDiaN_80N, 1)
+  status = nf_put_vara_double(ncid, valDetNID_80N, rec_count, 1, valDetN_80N, 1)
+  status = nf_put_vara_double(ncid, valBenNID_80N, rec_count, 1, valBenN_80N, 1)
+  status = nf_put_vara_double(ncid, valPhyNID_80N, rec_count, 1, valPhyN_80N, 1)
+  status = nf_put_vara_double(ncid, valHetNID_80N, rec_count, 1, valHetN_80N, 1)
 
   status=nf_close(ncid)
 
@@ -385,8 +785,10 @@ subroutine compute_recom_diagnostics(mode, mesh)
   if (ldiag_carbon)      call compute_carbon_diag(mode,mesh)
   !2. silicate diagnostic
   if (ldiag_silicate)    call compute_silicate_diag(mode,mesh)
-  !3. write total carbon and silicate out into recom.diag.nc
-  if (ldiag_carbon .or. ldiag_silicate) call write_recom_diag(mode, mesh)
+  !3. nitrate diagnostic
+  if (ldiag_nitrate)    call compute_nitrate_diag(mode,mesh)
+  !4. write total carbon and silicate out into recom.diag.nc
+  if (ldiag_carbon .or. ldiag_silicate .or. ldiag_nitrate) call write_recom_diag(mode, mesh)
 
 end subroutine compute_recom_diagnostics
 

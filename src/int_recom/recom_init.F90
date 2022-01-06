@@ -282,19 +282,11 @@ end if
 
 
  if (REcoM_Second_Zoo) then
-!   if (REcoM_Second_Zoo .and. zoo2_initial_field) then
-!     tracer(:,:,27) = tiny            ! tracer 26 = DetZ2N
-!     tracer(:,:,28) = tiny            ! tracer 27 = DetZ2C
-!     tracer(:,:,29) = tiny            ! tracer 28 = DetZ2Si
-!     tracer(:,:,30) = tiny            ! tracer 29 = DetZ2Calc
-!     else
-!     tracer(:,:,25) = tiny            ! tracer 24 = Zoo2N                                      
-!     tracer(:,:,26) = tiny            ! tracer 25 = Zoo2C 
-     tracer(:,:,27) = tiny            ! tracer 26 = DetZ2N                              
-     tracer(:,:,28) = tiny            ! tracer 27 = DetZ2C                                    
-     tracer(:,:,29) = tiny            ! tracer 28 = DetZ2Si                            
-     tracer(:,:,30) = tiny            ! tracer 29 = DetZ2Calc 
-!   endif
+     tracer(:,:,27) = tiny            ! tracer 27 = DetZ2N                              
+     tracer(:,:,28) = tiny            ! tracer 28 = DetZ2C                                    
+     tracer(:,:,29) = tiny            ! tracer 29 = DetZ2Si                            
+     tracer(:,:,30) = tiny            ! tracer 30 = DetZ2Calc 
+
   endif
 
 
