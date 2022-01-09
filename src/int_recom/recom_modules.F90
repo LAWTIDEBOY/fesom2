@@ -47,7 +47,7 @@ module recom_config
 
   logical                :: recom_binary_init    = .false.  ! Restart from binary
   Integer                :: bgc_num               = 22
-  Integer                :: diags3d_num           = 2       ! Number of diagnostic 3d tracers to be saved
+  Integer                :: diags3d_num           = 10       ! Number of diagnostic 3d tracers to be saved
   Real(kind=8)           :: VDet                  = 20.d0   ! Sinking velocity, constant through the water column and positive downwards
   Real(kind=8)           :: VDet_zoo2             = 200.d0   ! Sinking velocity, constant through the water column 
   Real(kind=8)           :: VPhy                  = 0.d0    !!! If the number of sinking velocities are different from 3, code needs to be changed !!!
@@ -547,7 +547,7 @@ Module REcoM_locVar
   Real(kind=8) :: NDust                     ! [mmol/m2/s]
   Real(kind=8) :: Loc_ice_conc(1)           ! Used to calculate flux of DIC in REcoM 0 -> 1
   Real(kind=8) :: LocAtmCO2(1)              ! [uatm]
-  Real(kind=8) :: LocDiags2D(8)
+  Real(kind=8) :: LocDiags2D(14)
 !  Real(kind=8) :: LocDenit
   Real(kind=8) :: LocRiverDIN, LocRiverDON, LocRiverDOC, LocRiverDSi, LocRiverDIC, LocRiverAlk
 !  if (REcoM_Second_Zoo) then

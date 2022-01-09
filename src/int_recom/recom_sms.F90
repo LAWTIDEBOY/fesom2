@@ -1745,13 +1745,50 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
      	- lossN * limitFacN_dia   * DiaN  &
      	) * recipbiostep
 
-!*** Changed to chlorophyll degradation (commented out gross N-assimilation below)
-        Diags3Dloc(k,7) = Diags3Dloc(k,7) + (   &
-        + KOchl  &
+!*** Net Si-assimilation [mmol N/(m3 * day)]
+    Diags3Dloc(k,7) = Diags3Dloc(k,7) + (   &
+        + Si_assim                        * DiaC  &
+        - lossN_d * limitFacN_dia         * DiaSi &
         ) * recipbiostep
 
-        Diags3Dloc(k,8) = Diags3Dloc(k,8) + (   &
-        + KOchl_dia  &
+!*** Remineralisation to DIN [mmol N/(m3 * day)]
+    Diags3Dloc(k,8) = Diags3Dloc(k,8) + (   &
+        + rho_N * arrFunc              * DON  &
+        ) * recipbiostep
+        
+!*** N-dissolution
+    Diags3Dloc(k,9) = Diags3Dloc(k,9) + (   &
+        + reminN * arrFunc             * DetN   &
+        + reminN * arrFunc             * DetZ2N  &
+        ) * recipbiostep
+
+!*** Si-dissolution
+    Diags3Dloc(k,10) = Diags3Dloc(k,10) + (   &
+        + reminSiT                     * DetSi  &
+        + reminSiT                     * DetZ2Si &
+        ) * recipbiostep
+        
+!*** Grazzing by Zooplankton [mmol N/(m3 * day)]
+
+    Diags3Dloc(k,11) = Diags3Dloc(k,11) + (   &
+        - grazingFlux_phy                        &
+        - grazingFlux_phy2                       &
+        - grazingFlux_Dia                        &
+        - grazingFlux_Dia2                       &
+        ) * recipbiostep
+
+    Diags3Dloc(k,12) = Diags3Dloc(k,12) + (   &
+        - grazingFlux_dia * qSiN                 & ! -- Grazing loss
+        - grazingFlux_dia2 * qSiN                &
+        ) * recipbiostep
+        
+!*** Phytoplankton Aggregation [mmol N/(m3 * day)]
+    Diags3Dloc(k,13) = Diags3Dloc(k,13) + (   &
+        - aggregationRate                * DiaN  &
+        ) * recipbiostep
+
+    Diags3Dloc(k,14) = Diags3Dloc(k,14) + (   &
+        - aggregationRate                 * DiaSi &
         ) * recipbiostep
 
   end do ! Main vertikal loop ends

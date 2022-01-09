@@ -135,7 +135,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> bio_fluxes'
      FeDust = GloFeDust(n) * (1 - a_ice(n)) * dust_sol    
      NDust = GloNDust(n)  * (1 - a_ice(n))
 
-     allocate(Diags3Dloc(nzmax,8))
+     allocate(Diags3Dloc(nzmax,14))
      Diags3Dloc(:,:) = 0.d0
 
 if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_Forcing'//achar(27)//'[0m'
@@ -151,7 +151,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_Forci
      !!---- Local variables that have been changed during the time-step are stored so they can be saved
      Benthos(n,1:benthos_num)     = LocBenthos(1:benthos_num)                                ! Updating Benthos values
 
-     Diags2D(n,1:8)               = LocDiags2D(1:8)                                ! Updating diagnostics
+     Diags2D(n,1:14)              = LocDiags2D(1:14)                    ! Updating diagnostics
      GloPCO2surf(n)               = pco2surf(1)
      GlodPCO2surf(n)              = dpco2surf(1)
 

@@ -413,14 +413,44 @@ CASE ('NNAd     ')
     call def_stream(nod2D,  myDim_nod2D,   'NNAd','Net N-assimilation diatoms','mmolN/(m2*d)', diags2D(:,6), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
 
-CASE ('GNAn     ')
+CASE ('NSiA     ')
     if (use_REcoM) then
-    call def_stream(nod2D,  myDim_nod2D,   'GNAn','Gross N-assimilation nanophytoplankton','mmolN/(m2*d)', diags2D(:,7), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    call def_stream(nod2D,  myDim_nod2D,   'NsiA','Net Si-assimilation diatoms','mmolN/(m2*d)', diags2D(:,7), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
 
-CASE ('GNAd     ')
+CASE ('ReN     ')
     if (use_REcoM) then
-    call def_stream(nod2D,  myDim_nod2D,   'GNAd','Gross N-assimilation diatoms','mmolN/(m2*d)', diags2D(:,8), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    call def_stream(nod2D,  myDim_nod2D,   'ReN','Reminelization to DIN','mmolSi/(m2*d)', diags2D(:,8), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+    
+CASE ('DissN     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'DissN','DetN dissolution','mmolN/(m2*d)', diags2D(:,9), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+CASE ('DissSi     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'DissSi','DetSi dissolution','mmolSi/(m2*d)', diags2D(:,10), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+    
+CASE ('GrazN     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'GrazN','Total N-grazing','mmolN/(m2*d)', diags2D(:,11), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+CASE ('GrazSi     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'GrazSi','Total Si-grazing','mmolSi/(m2*d)', diags2D(:,12), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+    
+CASE ('AggN     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'AggN','Phytoplankton N-Aggregation','mmolN/(m2*d)', diags2D(:,13), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+CASE ('AggSi     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'AggSi','Phytoplankton Si-Aggregation','mmolSi/(m2*d)', diags2D(:,14), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
 #endif
 !___________________________________________________________________________________________________________________________________    
@@ -652,7 +682,7 @@ END DO
      if (sel_forcvar(12)==0) call def_stream(elem2D, myDim_elem2D,   'ty_sur',     'meridional wind stress to ocean','m/s2', stress_surf(2, 1:myDim_elem2D),1, 'm', i_real4, mesh) ; sel_forcvar(12)=1
   end if
 
-    
+  if (ldiag_energy) then  
     if (mix_scheme_nmb==5 .or. mix_scheme_nmb==56) then
         ! TKE diagnostic 
         call def_stream((/nl,nod2D/), (/nl,myDim_nod2D/), 'tke'     , 'turbulent kinetic energy'                    , 'm^2/s^2', tke(:,:)     , 1, 'y', i_real4, mesh)
@@ -689,7 +719,7 @@ END DO
         call def_stream((/nl,nod2D/), (/nl,myDim_nod2D/), 'tidal_Av'  , 'tidal viscosity'             , 'm^2/s'    , tidal_Av(:,:)  , 1, 'y', i_real4, mesh)
         call def_stream(     nod2D  ,      myDim_nod2D  , 'tidal_forcbot', 'near tidal bottom forcing', 'W/m^2'    , tidal_forc_bottom_2D  , 100, 'y', i_real4, mesh)
     end if
-    
+  end if
   !___________________________________________________________________________________________________________________________________
   ! output Redi parameterisation
   if (Redi) then
