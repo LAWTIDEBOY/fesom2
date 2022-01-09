@@ -415,12 +415,12 @@ CASE ('NNAd     ')
 
 CASE ('NSiA     ')
     if (use_REcoM) then
-    call def_stream(nod2D,  myDim_nod2D,   'NsiA','Net Si-assimilation diatoms','mmolN/(m2*d)', diags2D(:,7), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    call def_stream(nod2D,  myDim_nod2D,   'NsiA','Net Si-assimilation diatoms','mmolSi/(m2*d)', diags2D(:,7), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
 
 CASE ('ReN     ')
     if (use_REcoM) then
-    call def_stream(nod2D,  myDim_nod2D,   'ReN','Reminelization to DIN','mmolSi/(m2*d)', diags2D(:,8), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    call def_stream(nod2D,  myDim_nod2D,   'ReN','Reminelization to DIN','mmolN/(m2*d)', diags2D(:,8), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
     
 CASE ('DissN     ')
@@ -451,6 +451,16 @@ CASE ('AggN     ')
 CASE ('AggSi     ')
     if (use_REcoM) then
     call def_stream(nod2D,  myDim_nod2D,   'AggSi','Phytoplankton Si-Aggregation','mmolSi/(m2*d)', diags2D(:,14), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+    
+CASE ('ReNb     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'ReNb','Remineralization rate for benthic N','mmolN/(m2*s)', GlodecayBenthos(:,1), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+CASE ('ReSib     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'ReSib','Remineralization rate for benthic Si','mmolSi/(m2*s)', GlodecayBenthos(:,3), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
 #endif
 !___________________________________________________________________________________________________________________________________    
