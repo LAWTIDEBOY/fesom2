@@ -1790,6 +1790,24 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     Diags3Dloc(k,14) = Diags3Dloc(k,14) + (   &
         - aggregationRate                 * DiaSi &
         ) * recipbiostep
+        
+!*** Light limiting factor for Dia & Phy [0-> 100& light limitation, 1->0%]
+	Diags3Dloc(k,15) = Diags3Dloc(k,15) + (   &
+     	+ Llim_phy  &
+     	) * recipbiostep
+
+	Diags3Dloc(k,16) = Diags3Dloc(k,16) + (   &
+     	+ Llim_dia  &
+     	) * recipbiostep
+
+!*** Nutrient limiting factor for Dia & Phy [0-> 100& light limitation, 1->0%]
+	Diags3Dloc(k,17) = Diags3Dloc(k,17) + (   &
+     	+ Nutlim_phy  &
+     	) * recipbiostep
+
+	Diags3Dloc(k,18) = Diags3Dloc(k,18) + (   &
+     	+ Nutlim_dia  &
+     	) * recipbiostep
 
   end do ! Main vertikal loop ends
 

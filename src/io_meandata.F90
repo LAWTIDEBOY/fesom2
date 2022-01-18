@@ -462,6 +462,28 @@ CASE ('ReSib     ')
     if (use_REcoM) then
     call def_stream(nod2D,  myDim_nod2D,   'ReSib','Remineralization rate for benthic Si','mmolSi/(m2*s)', GlodecayBenthos(:,3), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
+
+CASE ('LlimP     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'LlimP','Nutrient limiting factor for Phy','[0-> 100& light limitation, 1->0%]', diags2D(:,15), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+CASE ('LlimD     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'LlimD','Nutrient limiting factor for Dia','[0-> 100& light limitation, 1->0%]', diags2D(:,16), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+    
+CASE ('NlimP     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'NlimP','Light limiting factor for Phy','[0-> 100& light limitation, 1->0%]', diags2D(:,17), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+CASE ('NlimD     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'NlimD','Light limiting factor for Dia','[0-> 100& light limitation, 1->0%]', diags2D(:,18), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+
 #endif
 !___________________________________________________________________________________________________________________________________    
 !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   3D streams   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

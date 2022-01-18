@@ -177,7 +177,7 @@ end if
     dpco2surf= 0.d0
 
     if (Diags) then
-        allocate(diags2D(node_size,14))
+        allocate(diags2D(node_size,18))
         diags2D(:,:)      = 0.d0
         allocate(diags3D(nl-1,node_size,diags3d_num))
         diags3D(:,:,:)      = 0.d0
