@@ -78,4 +78,6 @@ io_list =  'ssh       ',1, 'm', 4,
            'LlimD     ',1, 'm', 4,
            'NlimP     ',1, 'm', 4,
            'NlimD     ',1, 'm', 4,
+           'wFNb      ',1, 'm', 4,
+           'wFSib     ',1, 'm', 4,
 /

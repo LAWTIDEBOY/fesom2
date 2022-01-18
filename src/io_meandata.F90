@@ -462,6 +462,16 @@ CASE ('ReSib     ')
     if (use_REcoM) then
     call def_stream(nod2D,  myDim_nod2D,   'ReSib','Remineralization rate for benthic Si','mmolSi/(m2*s)', GlodecayBenthos(:,3), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
+    
+CASE ('wFNb     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'wFNb','Sinking flux into benthic N','mmolN/(m2*d)', wFluxDet(:,1), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+
+CASE ('wFSib     ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'wFSib','Sinking flux into benthic Si','mmolSi/(m2*d)', wFluxDet(:,3), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
 
 CASE ('LlimP     ')
     if (use_REcoM) then
