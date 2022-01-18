@@ -550,6 +550,7 @@ Module REcoM_locVar
   Real(kind=8) :: LocDiags2D(18)
 !  Real(kind=8) :: LocDenit
   Real(kind=8) :: LocRiverDIN, LocRiverDON, LocRiverDOC, LocRiverDSi, LocRiverDIC, LocRiverAlk
+  Real(kind=8) :: Llim_dia, Llim_phy, Nutlim_dia, Nutlim_phy ! Limiting factors
 !  if (REcoM_Second_Zoo) then
   Real(kind=8) :: res_zoo2_a, res_zoo2_f
   Real(kind=8) :: grazingFluxcarbonzoo2                      ! grazingfluxcarbon 

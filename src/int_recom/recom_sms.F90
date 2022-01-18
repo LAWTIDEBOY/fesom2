@@ -276,6 +276,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     feLimitFac  	= Fe/(k_Fe + Fe)                       ! Use Michaelis–Menten kinetics
     qlimitFac   	= min(qlimitFac,feLimitFac)            ! Liebig law of the minimum
     pMax          	= P_cm * qlimitFac * arrFunc           ! Maximum value of C-specific rate of photosynthesis
+    Nutlim_dia      = qlimitFac
     
 !_______________________________________________________________________
 !< Diatoms
@@ -285,6 +286,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     feLimitFac  	= Fe/(k_Fe_d + Fe)
     qlimitFac   	= min(qlimitFac,feLimitFac)
     pMax_dia      	= P_cm_d * qlimitFac * arrFunc
+    Nutlim_dia      = qlimitFac
 
 !_______________________________________________________________________
 !< Light
@@ -313,9 +315,11 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     if ( pMax .lt. tiny .OR. PARave /= PARave                  &
          .OR. CHL2C /= CHL2C) then
         Cphot       = zero
+        Llim_phy    = zero  
     else
         Cphot       = pMax*( real(one) &
                      - exp(-alfa * Chl2C * PARave / pMax))
+        Llim_phy    = real(one) - exp(-alfa * Chl2C * PARave / pMax)
     end if
     if ( Cphot .lt. tiny) Cphot = zero
     
@@ -324,9 +328,11 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     if ( pMax_dia .lt. tiny .OR. PARave /= PARave               &
          .OR. CHL2C_dia /= CHL2C_dia) then
         Cphot_dia   = zero
+        Llim_dia    = zero
     else
         Cphot_dia   = pMax_dia * (real(one) &
                      - exp(-alfa_d * Chl2C_dia * PARave / pMax_dia))
+        Llim_dia    = real(one)-exp(-alfa_d*Chl2C_dia*PARave/pMax_dia)
     end if
     if (Cphot_dia .lt. tiny) Cphot_dia = zero
 

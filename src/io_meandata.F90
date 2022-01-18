@@ -465,12 +465,12 @@ CASE ('ReSib     ')
     
 CASE ('wFNb     ')
     if (use_REcoM) then
-    call def_stream(nod2D,  myDim_nod2D,   'wFNb','Sinking flux into benthic N','mmolN/(m2*d)', wFluxDet(:,1), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    call def_stream(nod2D,  myDim_nod2D,   'wFNb','Sinking flux into benthic N','mmolN/(m2*d)', GlowFluxDet(:,1), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
 
 CASE ('wFSib     ')
     if (use_REcoM) then
-    call def_stream(nod2D,  myDim_nod2D,   'wFSib','Sinking flux into benthic Si','mmolSi/(m2*d)', wFluxDet(:,3), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    call def_stream(nod2D,  myDim_nod2D,   'wFSib','Sinking flux into benthic Si','mmolSi/(m2*d)', GlowFluxDet(:,3), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
 
 CASE ('LlimP     ')
@@ -492,8 +492,6 @@ CASE ('NlimD     ')
     if (use_REcoM) then
     call def_stream(nod2D,  myDim_nod2D,   'NlimD','Light limiting factor for Dia','[0-> 100& light limitation, 1->0%]', diags2D(:,18), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
-
-
 #endif
 !___________________________________________________________________________________________________________________________________    
 !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   3D streams   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
