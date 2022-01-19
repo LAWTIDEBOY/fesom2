@@ -201,13 +201,13 @@ subroutine compute_carbon_diag(mode,mesh)
         
         !BenC
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenC_80N*ind_arctic_80_2D,mesh)
+         call integrate_bottom(Benthos(:,2)*ind_arctic_80_2D,valBenC_80N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenC at timestep :', mstep, valBenC_80N
         total_carbon_80N=total_carbon_80N+valBenC_80N
         
         !BenCalc
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenCalc_80N*ind_arctic_80_2D,mesh)
+         call integrate_bottom(Benthos(:,4)*ind_arctic_80_2D,valBenCalc_80N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenCalc at timestep :', mstep, valBenCalc_80N
         total_carbon_80N=total_carbon_80N+valBenCalc_80N
 
@@ -278,13 +278,13 @@ subroutine compute_carbon_diag(mode,mesh)
         
         !BenC
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenC_66N*ind_arctic_66_2D,mesh)
+         call integrate_bottom(Benthos(:,2)*ind_arctic_66_2D,valBenC_66N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of BenC at timestep :', mstep, valBenC_66N
         total_carbon_66N=total_carbon_66N+valBenC_66N
         
         !BenCalc
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenCalc_66N*ind_arctic_66_2D,mesh)
+         call integrate_bottom(Benthos(:,4)*ind_arctic_66_2D,valBenCalc_66N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenCalc at timestep :', mstep, valBenCalc_66N
         total_carbon_66N=total_carbon_66N+valBenCalc_66N
 
@@ -354,7 +354,7 @@ subroutine compute_silicate_diag(mode,mesh)
 
         !BenSi
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenSi_80N*ind_arctic_80_2D,mesh)
+         call integrate_bottom(Benthos(:,3)*ind_arctic_80_2D,valBenSi_80N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenSi at timestep :', mstep, valBenSi_80N
         total_silicate_80N=total_silicate_80N+valBenSi_80N
 
@@ -378,7 +378,7 @@ subroutine compute_silicate_diag(mode,mesh)
 
         !BenSi
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenSi_66N*ind_arctic_66_2D,mesh)
+         call integrate_bottom(Benthos(:,3)*ind_arctic_66_2D,valBenSi_66N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of BenSi at timestep :', mstep, valBenSi_66N
         total_silicate_66N=total_silicate_66N+valBenSi_66N
 
@@ -461,7 +461,7 @@ subroutine compute_nitrate_diag(mode,mesh)
 
         !BenN
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenN_80N*ind_arctic_80_2D,mesh)
+         call integrate_bottom(Benthos(:,1)*ind_arctic_80_2D,valBenN_80N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>80N) of BenN at timestep :', mstep, valBenN_80N
         total_nitrate_80N=total_nitrate_80N+valBenN_80N
 
@@ -500,7 +500,7 @@ subroutine compute_nitrate_diag(mode,mesh)
 !end if 
         !BenN
 !        call integrate_nod(Benthos(:,3), valBenSi, mesh)
-         call integrate_bottom(valBenN_66N*ind_arctic_66_2D,mesh)
+         call integrate_bottom(Benthos(:,3)*ind_arctic_66_2D,valBenN_66N,mesh)
         if (mype==0 .and. mod(mstep,recom_logfile_outfreq)==0) write(*,*) 'total integral (>66N) of BenN at timestep :', mstep, valBenN_66N
         total_nitrate_66N=total_nitrate_66N+valBenN_66N
 
