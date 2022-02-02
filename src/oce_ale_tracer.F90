@@ -890,6 +890,7 @@ use ver_sinking_recom_benthos_interface
     integer                   :: elem,k, tr_num
     integer                   :: nl1,ul1,nz,n,nzmin, nzmax, net
     real(kind=WP)             :: Vben(mesh%nl),  aux(mesh%nl-1),  flux(mesh%nl), add_benthos_2d(myDim_nod2D)
+    real(kind=WP)             :: aux1(mesh%nl-1), add_benthos_2d_flux(myDim_nod2D)
     integer                   :: nlevels_nod2D_minimum
     real(kind=WP)             :: tv
 #include "associate_mesh.h"
@@ -899,8 +900,10 @@ use ver_sinking_recom_benthos_interface
         ul1=ulevels_nod2D(n)
         
         aux=0._WP
+        aux1=0._WP
         Vben=0._WP
         add_benthos_2d=0._WP
+        add_benthos_2d_flux=0._WP
 
 ! 1) Calculate sinking velociy for vertical sinking case
 ! ******************************************************
@@ -958,6 +961,13 @@ use ver_sinking_recom_benthos_interface
            str_bf(nz,n) = str_bf(nz,n) + (aux(nz))*dt/area(nz,n)/(zbar_3d_n(nz,n)-zbar_3d_n(nz+1,n))
            !add_benthos_2d(n) = add_benthos_2d(n) - (aux(nz+1))*dt
            add_benthos_2d(n) = add_benthos_2d(n) - (aux(nz))*dt
+           
+           if (aux1(nz) .le. tiny) then ! if the area is very small or zero
+               add_benthos_2d_flux(n)=0.0d0
+           else
+               add_benthos_2d_flux(n) = add_benthos_2d_flux(n) - (aux(nz)/aux1(nz))
+           endif
+           
         end do                 
 
             ! N
@@ -966,6 +976,7 @@ use ver_sinking_recom_benthos_interface
                 tracer_id(tr_num)==1013 .or. &  !idian
                 tracer_id(tr_num)==1025 ) then  !idetz2n
                 Benthos(n,1)= Benthos(n,1) +  add_benthos_2d(n) ![mmol]
+                Benthos_flux(n,1)= Benthos_flux(n,1) + add_benthos_2d_flux(n)
             endif
          
             ! C
@@ -974,6 +985,7 @@ use ver_sinking_recom_benthos_interface
                 tracer_id(tr_num)==1014 .or. &  !idiac
                 tracer_id(tr_num)==1026 ) then  !idetz2c
                 Benthos(n,2)= Benthos(n,2) + add_benthos_2d(n)
+                Benthos_flux(n,2)= Benthos_flux(n,2) + add_benthos_2d_flux(n)
             endif
 
             ! Si
@@ -981,19 +993,25 @@ use ver_sinking_recom_benthos_interface
                 tracer_id(tr_num)==1017 .or. &  !idetsi
                 tracer_id(tr_num)==1027 ) then  !idetz2si
                 Benthos(n,3)= Benthos(n,3) + add_benthos_2d(n)
+                Benthos_flux(n,3)= Benthos_flux(n,3) + add_benthos_2d_flux(n)
             endif
 
             ! Cal
             if( tracer_id(tr_num)==1020 .or. &  !iphycal
                 tracer_id(tr_num)==1021 .or. &  !idetcal
                 tracer_id(tr_num)==1028 ) then  !idetz2cal
-                Benthos(n,4)= Benthos(n,4) + add_benthos_2d(n) 
+                Benthos(n,4)= Benthos(n,4) + add_benthos_2d(n)
+                Benthos_flux(n,4)= Benthos_flux(n,4) + add_benthos_2d_flux(n)
             endif
 end do
 
     do n=1, benthos_num
       call exchange_nod(Benthos(:,n))
     end do
+    call exchange_nod(Benthos_flux(:,1))
+    call exchange_nod(Benthos_flux(:,2))
+    call exchange_nod(Benthos_flux(:,3))
+    call exchange_nod(Benthos_flux(:,4))
 end subroutine ver_sinking_recom_benthos
 
 subroutine integrate_bottom(tflux,mesh)

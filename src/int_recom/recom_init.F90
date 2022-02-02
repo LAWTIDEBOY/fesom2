@@ -69,6 +69,7 @@ subroutine recom_init(mesh)
     allocate(PAR3D(nl-1,node_size))
     allocate(DenitBen(node_size)) 
     allocate(Benthos(node_size,benthos_num))
+    allocate(Benthos_flux(node_size,benthos_num))
     allocate(LocBenthos(benthos_num))
     allocate(decayBenthos(benthos_num)) ! [1/day] Decay rate of detritus in the benthic layer
 
@@ -233,6 +234,7 @@ end if
     ! Benthic layer consists of Benthos(1) = N, Benthos(2)=C, Benthos(3)=Si, Benthos(4)=calc
   
     Benthos(:,:) = 0.d0 !tiny
+    Benthos_flux(:,:) = 0.d0 !tiny
     GloHplus = exp(-8.d0 * log(10.d0)) ! = 10**(-8)
     !___________________________________________________________________________
     if(mype==0) write(*,*) 'Benthic layers are set'
