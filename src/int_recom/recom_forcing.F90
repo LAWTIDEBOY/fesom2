@@ -255,7 +255,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> ciso after 
 	  LocDiags2D(idiags) = sum(diags3Dloc(1:nn,idiags) * thick(1:nn))
 	end do
     do idiags = 15,18
-	  LocDiags2D(idiags) = sum(diags3Dloc(1:5,idiags) * thick(1:5)) / sum(thick(1:5)
+	  LocDiags2D(idiags) = sum(diags3Dloc(1:5,idiags) * thick(1:5)) / sum(thick(1:5))
 	end do
   end if
 
