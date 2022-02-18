@@ -120,7 +120,7 @@ module integrate_bottom_interface
       use mod_mesh
       use g_PARSUP
       type(t_mesh), intent(in) , target :: mesh
-      real(kind=WP), intent(in)       :: data(:,:)
+      real(kind=WP), intent(in)       :: data(:)
       integer, intent(inout)      :: tflux
     end subroutine
   end interface
