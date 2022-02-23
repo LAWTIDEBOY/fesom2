@@ -314,7 +314,7 @@ subroutine compute_silicate_diag(mode,mesh)
   
   ind_arctic_66_3D = 1.0_WP
   ind_arctic_66_2D = 1.0_WP
-  do k=1, myDim_nod2D+eDim_nod2D
+  do k=1, myDim_nod2D
       if (geo_coord_nod2D(2,k) < 66*rad) then
           ind_arctic_66_3D(:,k) = 0.0_WP
           ind_arctic_66_2D(k) = 0.0_WP
@@ -323,7 +323,7 @@ subroutine compute_silicate_diag(mode,mesh)
   
   ind_arctic_80_3D = 1.0_WP
   ind_arctic_80_2D = 1.0_WP
-  do k=1, myDim_nod2D+eDim_nod2D
+  do k=1, myDim_nod2D
       if (geo_coord_nod2D(2,k) < 80*rad) then
           ind_arctic_80_3D(:,k) = 0.0_WP
           ind_arctic_80_2D(k) = 0.0_WP
@@ -406,7 +406,7 @@ subroutine compute_nitrate_diag(mode,mesh)
   
   ind_arctic_66_3D = 1.0_WP
   ind_arctic_66_2D = 1.0_WP
-  do k=1, myDim_nod2D+eDim_nod2D
+  do k=1, myDim_nod2D
       if (geo_coord_nod2D(2,k) < 66*rad) then
           ind_arctic_66_3D(:,k) = 0.0_WP
           ind_arctic_66_2D(k) = 0.0_WP
@@ -415,7 +415,7 @@ subroutine compute_nitrate_diag(mode,mesh)
   
   ind_arctic_80_3D = 1.0_WP
   ind_arctic_80_2D = 1.0_WP
-  do k=1, myDim_nod2D+eDim_nod2D
+  do k=1, myDim_nod2D
       if (geo_coord_nod2D(2,k) < 80*rad) then
           ind_arctic_80_3D(:,k) = 0.0_WP
           ind_arctic_80_2D(k) = 0.0_WP
