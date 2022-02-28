@@ -116,11 +116,11 @@ module ver_sinking_recom_benthos_interface
 end module
 module integrate_bottom_interface
   interface
-    subroutine integrate_bottom(data, tflux, mesh)
+    subroutine integrate_bottom(influx, tflux, mesh)
       use mod_mesh
       use g_PARSUP
       type(t_mesh), intent(in) , target :: mesh
-      real(kind=WP), intent(in)       :: data(:)
+      real(kind=WP), intent(in)  :: influx(:)
       integer, intent(inout)      :: tflux
     end subroutine
   end interface
@@ -1017,7 +1017,7 @@ end do
     call exchange_nod(Benthos_flux(:,4))
 end subroutine ver_sinking_recom_benthos
 
-subroutine integrate_bottom(data,tflux,mesh)
+subroutine integrate_bottom(influx,tflux,mesh)
     use o_ARRAYS
     use g_PARSUP
     use MOD_MESH
@@ -1036,15 +1036,18 @@ subroutine integrate_bottom(data,tflux,mesh)
     integer                            :: elem,k, tr_num
     integer                            :: nl1,ul1,nz,n
     real(kind=WP)                      :: tf, aux(mesh%nl-1)
-    real(kind=WP), intent(in)          :: data(:)
     real(kind=WP), intent(inout)       :: tflux
+    real(kind=WP), intent(in)          :: influx(myDim_nod2D)
     integer                            :: nlevels_nod2D_minimum
 #include "associate_mesh.h"
 
-   tf =0._WP
-   do n=1, myDim_nod2D 
-         tf=tf+data(n)
+   tf =0.0_WP
+   do n=1, myDim_nod2D
+!         tf=tf+Benthos(n,3)
+         tf=tf+influx(n)
    end do
+
+!if (mype==0) print*, tf 
    tflux=0.0_WP
    call MPI_AllREDUCE(tf, tflux, 1, MPI_DOUBLE_PRECISION, MPI_SUM, &
         MPI_COMM_FESOM, MPIerr)
