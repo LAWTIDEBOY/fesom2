@@ -727,6 +727,8 @@ if (do_output) then
   status = nf_put_vara_double(ncid, valDiaCID_66N, rec_count, 1, valDiaC_66N, 1)
   status = nf_put_vara_double(ncid, valPhyCalcID_66N, rec_count, 1, valPhyCalc_66N, 1)
   status = nf_put_vara_double(ncid, valDetCalcID_66N, rec_count, 1, valDetCalc_66N, 1)
+  status = nf_put_vara_double(ncid, valBenCalcID_66N, rec_count, 1, valBenCalc_66N, 1)
+  status = nf_put_vara_double(ncid, valBenCID_66N, rec_count, 1, valBenC_66N, 1)
   
   status = nf_put_vara_double(ncid, tcID_80N, rec_count, 1, total_carbon_80N, 1)
   status = nf_put_vara_double(ncid, valDICID_80N, rec_count, 1, valDIC_80N, 1)
@@ -737,6 +739,8 @@ if (do_output) then
   status = nf_put_vara_double(ncid, valDiaCID_80N, rec_count, 1, valDiaC_80N, 1)
   status = nf_put_vara_double(ncid, valPhyCalcID_80N, rec_count, 1, valPhyCalc_80N, 1)
   status = nf_put_vara_double(ncid, valDetCalcID_80N, rec_count, 1, valDetCalc_80N, 1)
+  status = nf_put_vara_double(ncid, valBenCalcID_80N, rec_count, 1, valBenCalc_80N, 1)
+  status = nf_put_vara_double(ncid, valBenCID_80N, rec_count, 1, valBenC_80N, 1)
 
   status = nf_put_vara_double(ncid, tsID_66N, rec_count, 1, total_silicate_66N, 1)
   status = nf_put_vara_double(ncid, valDSiID_66N, rec_count, 1, valDSi_66N, 1)
