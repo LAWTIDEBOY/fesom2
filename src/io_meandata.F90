@@ -332,6 +332,21 @@ CASE ('aN        ')
     if (use_REcoM) then
     call def_stream(nod2D,  myDim_nod2D,   'aN','Atmospheric DIN input','mmolN/m2/s', AtmNInput(:), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
     end if
+    
+CASE ('riverN    ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'riverN','riverine DIN input','mmolN/m2/s', RiverDIN2D(:), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+    
+CASE ('eroN    ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'eroN','erosion DIN input','mmolN/m2/s', ErosionTON2D(:), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
+    
+CASE ('riverC    ')
+    if (use_REcoM) then
+    call def_stream(nod2D,  myDim_nod2D,   'riverC','riverine DIC input','mmolN/m2/s', RiverDIC2D(:), io_list(i)%freq, io_list(i)%unit, io_list(i)%precision, mesh)
+    end if
 
 CASE ('denb      ')
     if (use_REcoM) then
