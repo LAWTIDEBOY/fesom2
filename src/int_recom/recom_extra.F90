@@ -439,7 +439,7 @@ subroutine River_input(mesh)
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
             RiverDSi2D = RiverDIN2D * 9d0  
             
-           if (runoff_climatology .eq. .false.) then
+           if (runoff_climatology .eqv. .false.) then
              !-Reading Erosion-------------------------------------------------------------------
               if (mstep == 1) then ! The year has changed
                  runofffilename = trim(REcoMDataPath)//'hist_yearlyrunofffactor.nc'
@@ -508,7 +508,7 @@ subroutine River_input(mesh)
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
             RiverDSi2D = RiverDIN2D * 9d0
             
-           if (runoff_climatology .eq. .false.) then
+           if (runoff_climatology .eqv. .false.) then
              !-Reading Erosion-------------------------------------------------------------------
               if (mstep == 1) then ! The year has changed
                  runofffilename = trim(REcoMDataPath)//'hist_yearlyrunofffactor.nc'
