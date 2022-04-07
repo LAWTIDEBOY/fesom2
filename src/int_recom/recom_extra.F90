@@ -621,7 +621,7 @@ subroutine Erosion_input(mesh)
            ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
            ErosionTSi2D=ErosionTON2D * 9d0
 !           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:)) 
-           if (runoff_climatology .eq. .false.) then
+           if (runoff_climatology .eqv. .false.) then
              !-Reading Erosion-------------------------------------------------------------------
               if (mstep == 1) then ! The year has changed
                  SATfilename = trim(REcoMDataPath)//'hist_yearlySATfactor.nc'
@@ -677,7 +677,7 @@ subroutine Erosion_input(mesh)
             ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
            ErosionTSi2D=ErosionTON2D * 9d0
 !           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:))   
-           if (runoff_climatology .eq. .false.) then
+           if (runoff_climatology .eqv. .false.) then
              !-Reading CO2----------------------------------------------------------------------
               if (mstep == 1) then ! The year has changed
                  SATfilename = trim(REcoMDataPath)//'hist_yearlySATfactor.nc'
