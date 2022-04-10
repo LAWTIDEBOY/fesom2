@@ -276,7 +276,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp,SinkVel,zF,PAR,
     feLimitFac  	= Fe/(k_Fe + Fe)                       ! Use Michaelis–Menten kinetics
     qlimitFac   	= min(qlimitFac,feLimitFac)            ! Liebig law of the minimum
     pMax          	= P_cm * qlimitFac * arrFunc           ! Maximum value of C-specific rate of photosynthesis
-    Nutlim_dia      = qlimitFac
+    Nutlim_phy      = qlimitFac
     
 !_______________________________________________________________________
 !< Diatoms
