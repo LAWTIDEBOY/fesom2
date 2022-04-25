@@ -516,10 +516,9 @@ subroutine River_input(mesh)
              RiverDOC2D = RiverDOC2D * runofffactor
              RiverDIC2D = RiverDIC2D * runofffactor
              RiverAlk2D = RiverAlk2D * runofffactor
-           end if
+
         end if
      end if
-
   else 
 
      is_riverinput = 0.0d0
@@ -599,7 +598,7 @@ subroutine Erosion_input(mesh)
            SATfactor = 1.0d0
            if (.not. runoff_climatology) then !if (runoff_climatology .eqv. .false.) then
              !-Reading Erosion-------------------------------------------------------------------
-              if (mstep == 1) then ! The year has changed
+
                  SATfilename = trim(REcoMDataPath)//'hist_yearlySATfactor.nc'
                  satvari     = 'factor_'//cyearnew
 
@@ -625,11 +624,10 @@ subroutine Erosion_input(mesh)
 
                 status=nf_close(ncid)
 
-               endif
+             endif
              ErosionTSi2D = ErosionTSi2D * SATfactor
              ErosionTON2D = ErosionTON2D * SATfactor
              ErosionTOC2D = ErosionTOC2D * SATfactor
-           end if
             
      else
 
