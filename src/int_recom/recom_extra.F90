@@ -438,10 +438,11 @@ subroutine River_input(mesh)
 !           call read_2ddata_on_grid_NetCDF(Riverfilename, 'DSi', i, RiverDSi2D, mesh) 
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
             RiverDSi2D = RiverDIN2D * 9d0  
-            
-           if (runoff_climatology .eqv. .false.) then
+
+            runofffactor = 1.0d0 ! set it always to one in the beginning
+            if (.not. runoff_climatology) then !if (runoff_climatology .eqv. .false.) then
              !-Reading Erosion-------------------------------------------------------------------
-              if (mstep == 1) then ! The year has changed
+
                  runofffilename = trim(REcoMDataPath)//'hist_yearlyrunofffactor.nc'
                  SATvari     = 'factor_'//cyearnew
 
@@ -466,14 +467,15 @@ subroutine River_input(mesh)
                  if (mype==0) write(*,*),'runoff factor=', runofffactor
 
                 status=nf_close(ncid)
-              end if
+            end if
+
              RiverDSi2D = RiverDSi2D * runofffactor
              RiverDIN2D = RiverDIN2D * runofffactor
              RiverDON2D = RiverDON2D * runofffactor
              RiverDOC2D = RiverDOC2D * runofffactor
              RiverDIC2D = RiverDIC2D * runofffactor
              RiverAlk2D = RiverAlk2D * runofffactor
-         endif   
+
      else
 
 !-Checking if files need to be opened---------------------------------------------
@@ -508,35 +510,7 @@ subroutine River_input(mesh)
 !           write(*,*) mype, 'RiverDSi2D', maxval(RiverDSi2D(:)), minval(RiverDSi2D(:))  
             RiverDSi2D = RiverDIN2D * 9d0
             
-           if (runoff_climatology .eqv. .false.) then
-             !-Reading Erosion-------------------------------------------------------------------
-              if (mstep == 1) then ! The year has changed
-                 runofffilename = trim(REcoMDataPath)//'hist_yearlyrunofffactor.nc'
-                 SATvari     = 'factor_'//cyearnew
-
-                 ! open file
-                 status=nf_open(runofffilename, nf_nowrite, ncid)
-                 if (status.ne.nf_noerr)then
-                    print*,'ERROR: CANNOT READ SAT factor FILE CORRECTLY !!!!!'
-                    print*,'Error in opening netcdf file '//runofffilename
-                    stop
-                 call par_ex
-                 endif    
-
-            !	! data
-                 allocate(ncdata(1))
-                 status=nf_inq_varid(ncid, SATvari, varid)
-                 SATstart = 1
-                 SATcount = 1
-                 status=nf_get_vara_double(ncid,varid,SATstart,SATcount,ncdata)
-                 runofffactor(:)=ncdata(:)
-                 deallocate(ncdata)
-                 if (mype==0) write(*,*),'Current year=', yearnew
-                 if (mype==0) write(*,*),'runoff factor=', runofffactor
-
-                status=nf_close(ncid)
-              end if
-             RiverDSi2D = RiverDSi2D * runofffactor
+             RiverDSi2D = RiverDSi2D * runofffactor  ! runofffactor, a global variable. Fill it in the first timestep (mstep==1) and keep it.
              RiverDIN2D = RiverDIN2D * runofffactor
              RiverDON2D = RiverDON2D * runofffactor
              RiverDOC2D = RiverDOC2D * runofffactor
@@ -620,8 +594,10 @@ subroutine Erosion_input(mesh)
 
            ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
            ErosionTSi2D=ErosionTON2D * 9d0
-!           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:)) 
-           if (runoff_climatology .eqv. .false.) then
+!           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:))
+
+           SATfactor = 1.0d0
+           if (.not. runoff_climatology) then !if (runoff_climatology .eqv. .false.) then
              !-Reading Erosion-------------------------------------------------------------------
               if (mstep == 1) then ! The year has changed
                  SATfilename = trim(REcoMDataPath)//'hist_yearlySATfactor.nc'
@@ -677,39 +653,12 @@ subroutine Erosion_input(mesh)
             ! No silicates in erosion, we convert from nitrogen with redfieldian ratio     
            ErosionTSi2D=ErosionTON2D * 9d0
 !           write(*,*) mype, 'ErosionTSi2D', maxval(ErosionTSi2D(:)), minval(ErosionTSi2D(:))   
-           if (runoff_climatology .eqv. .false.) then
-             !-Reading CO2----------------------------------------------------------------------
-              if (mstep == 1) then ! The year has changed
-                 SATfilename = trim(REcoMDataPath)//'hist_yearlySATfactor.nc'
-                 satvari     = 'factor_'//cyearnew
 
-                 ! open file
-                 status=nf_open(SATfilename, nf_nowrite, ncid)
-                 if (status.ne.nf_noerr)then
-                    print*,'ERROR: CANNOT READ SAT factor FILE CORRECTLY !!!!!'
-                    print*,'Error in opening netcdf file '//SATfilename
-                    stop
-                 call par_ex
-                 endif    
-
-            !	! data
-                 allocate(ncdata(1))
-                 status=nf_inq_varid(ncid, SATvari, varid)
-                 SATstart = 1
-                 SATcount = 1
-                 status=nf_get_vara_double(ncid,varid,SATstart,SATcount,ncdata)
-                 SATfactor(:)=ncdata(:)
-                 deallocate(ncdata)
-                 if (mype==0) write(*,*),'Current year=', yearnew
-                 if (mype==0) write(*,*),'SAT factor=', SATfactor
-
-                status=nf_close(ncid)
-
-               endif
-             ErosionTSi2D = ErosionTSi2D * SATfactor
+           !if (runoff_climatology .eqv. .false.) then NOT NEEDED
+             ErosionTSi2D = ErosionTSi2D * SATfactor !          SATfactor is read in the beginning
              ErosionTON2D = ErosionTON2D * SATfactor
              ErosionTOC2D = ErosionTOC2D * SATfactor
-           end if
+           !end if
         end if
      end if
   else
