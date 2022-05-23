@@ -192,7 +192,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_Forci
     call exchange_nod(Benthos(:,n))
   end do
   
-  do n=1, 8
+  do n=1, 14
     call exchange_nod(Diags2D(:,n))	
   end do
 
