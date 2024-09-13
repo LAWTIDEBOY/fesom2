@@ -199,7 +199,8 @@ CONTAINS
       integer                      :: ierror              ! return error code
       character(len=20)            :: aux_calendar
       integer                      :: aux_len
-
+      integer                      :: yyyy,mm,dd
+      
       !open file
       if (mype==0) then
          iost = nf_open(trim(flf%file_name),NF_NOWRITE,ncid)
@@ -392,6 +393,7 @@ CONTAINS
                  (trim(flf%calendar).eq.'gregorian') .or. &
                  (trim(flf%calendar).eq.'proleptic_gregorian') .or. &
                  (trim(flf%calendar).eq.'standard')) then
+if (0) then
             if (include_fleapyear .eqv. .false.) then
                 print *, achar(27)//'[33m'
                 write(*,*) '____________________________________________________________'
@@ -408,7 +410,8 @@ CONTAINS
                 write(*,*) '____________________________________________________________'
                 print *, achar(27)//'[0m'
                 call par_ex(0)
-            end if 
+            end if
+endif
          else
             print *, achar(27)//'[31m'
             write(*,*) '____________________________________________________________'
@@ -430,8 +433,23 @@ CONTAINS
          end if 
       end if
       
-    ! transform time axis accorcing to calendar and include_fleapyear=.true./.false. flag  
-      flf%nc_time = flf%nc_time / nm_nc_freq + julday(nm_nc_iyear,nm_nc_imm,nm_nc_idd)
+call MPI_Bcast(flf%calendar, len(flf%calendar), MPI_CHARACTER,0, MPI_COMM_FESOM, ierror) 
+
+ !   ! transform time axis accorcing to calendar and include_fleapyear=.true./.false. flag  
+ !     flf%nc_time = flf%nc_time / nm_nc_freq + julday(nm_nc_iyear,nm_nc_imm,nm_nc_idd)
+ 
+     flf%nc_time = flf%nc_time / nm_nc_freq 
+
+     flf%nc_time = flf%nc_time + julday(nm_nc_iyear,nm_nc_imm,nm_nc_idd,trim(flf%calendar))
+
+     call calendar_date(int(flf%nc_time(1)), yyyy, mm, dd, trim(flf%calendar))
+
+! remove the reference period of the original file 
+     flf%nc_time = flf%nc_time - julday(yyyy, 1, 1, trim(flf%calendar))
+
+! reset the reference period it should represent
+     flf%nc_time = flf%nc_time + julday(yearnew, 1, 1, trim(flf%calendar))
+     
       if (nm_nc_tmid/=1) then
          if (flf%nc_Ntime > 1) then
             do i = 1, flf%nc_Ntime-1
@@ -470,10 +488,10 @@ CONTAINS
    SUBROUTINE nc_sbc_ini_fillnames(yyyy)
       integer, intent(in)         :: yyyy
       character(len=4)            :: yyear
-
+            
       write(yyear,"(I4)") yyyy
       if (y_perpetual)    yyear = ''
-
+      
       !! ** Purpose : Fill names of sbc_flfi array (file names and variable names)
 
       !prepare proper nc file (add year and .nc to the end of the file name from namelist
@@ -511,14 +529,16 @@ CONTAINS
       if (l_cloud) sbc_flfi(i_cloud)%var_name=ADJUSTL(trim(nm_cloud_var))
    END SUBROUTINE nc_sbc_ini_fillnames
 
-   SUBROUTINE nc_sbc_ini(rdate, mesh)
+!   SUBROUTINE nc_sbc_ini(rdate, mesh)
+   SUBROUTINE nc_sbc_ini(mesh)
       !!---------------------------------------------------------------------
       !! ** Purpose : initialization of ocean forcing from NETCDF file
       !!----------------------------------------------------------------------
 
       IMPLICIT NONE
-      real(wp),intent(in) :: rdate ! initialization date
-      integer             :: idate
+!      real(wp),intent(in) :: rdate ! initialization date
+!      integer             :: idate
+      real(wp)         :: rdate
       integer             :: yyyy,mm,dd
 
       integer                  :: i
@@ -542,13 +562,19 @@ CONTAINS
 
 
       ! get ini year; Fill names of sbc_flfi
-      idate=int(rdate)
-      call calendar_date(idate,yyyy,mm,dd)
-      call nc_sbc_ini_fillnames(yyyy)
+!      idate=int(rdate)
+!      call calendar_date(idate,yyyy,mm,dd)
+      !call nc_sbc_ini_fillnames(yyyy)
+      call nc_sbc_ini_fillnames(yearnew)
       ! we assume that all NetCDF files have identical grid and time variable
       do fld_idx = 1, i_totfl
          call nc_readTimeGrid(sbc_flfi(fld_idx))
       end do
+      
+      ! compute the model rdate at initial moment
+      rdate = real(julday(yearnew, 1, 1, sbc_flfi(1)%calendar))
+      rdate = rdate+real(daynew-1,WP)+timenew/86400._WP
+      
       if (lfirst) then
       do fld_idx = 1, i_totfl
          flf=>sbc_flfi(fld_idx)
@@ -885,8 +911,8 @@ CONTAINS
       !!----------------------------------------------------------------------
       IMPLICIT NONE
 
-      integer            :: idate ! initialization date
-      real(wp)           :: rdate ! initialization date
+!      integer            :: idate ! initialization date
+!      real(wp)           :: rdate ! initialization date
       integer            :: iost  ! I/O status
       integer            :: sbc_alloc                   !: allocation status
 
@@ -912,10 +938,10 @@ CONTAINS
       READ( nm_sbc_unit, nml=nam_sbc, iostat=iost )
       close( nm_sbc_unit )
       
-      if (mype==0) write(*,*) "Start: Ocean forcing inizialization."
-      rdate = real(julday(yearnew,1,1))
-      rdate = rdate+real(daynew-1,WP)+timenew/86400._WP
-      idate = int(rdate)
+!      if (mype==0) write(*,*) "Start: Ocean forcing inizialization."
+!      rdate = real(julday(yearnew,1,1))
+!      rdate = rdate+real(daynew-1,WP)+timenew/86400._WP
+!      idate = int(rdate)
 
       if (mype==0) then
          write(*,*) "Start: Ocean forcing inizialization."
@@ -1024,7 +1050,9 @@ CONTAINS
       emp          = 0.0_WP
       qsr          = 0.0_WP
       ALLOCATE(sbc_flfi(i_totfl))
-      call nc_sbc_ini(rdate, mesh)
+!      call nc_sbc_ini(rdate, mesh)
+      call nc_sbc_ini(mesh)
+      
       !==========================================================================
       ! runoff    
       if (runoff_data_source=='CORE1' .or. runoff_data_source=='CORE2' ) then
@@ -1063,10 +1091,12 @@ CONTAINS
 
       force_newcoeff=.false.
       if (yearnew/=yearold) then
-         rdate = real(julday(yearnew,1,1),WP)
-         call calendar_date(int(rdate),yyyy,dd,mm)
+!         rdate = real(julday(yearnew,1,1),WP)
+!        call calendar_date(int(rdate),yyyy,dd,mm)
          ! use next set of forcing files
-         call nc_sbc_ini_fillnames(yyyy)
+!         call nc_sbc_ini_fillnames(yyyy)
+         call nc_sbc_ini_fillnames(yearnew)
+         
          ! we assume that all NetCDF files have identical grid and time variable
          do fld_idx = 1, i_totfl
             call nc_readTimeGrid(sbc_flfi(fld_idx))            
@@ -1075,11 +1105,16 @@ CONTAINS
       end if
       
 
-      rdate = real(julday(yearnew,1,1),WP)
-      rdate = rdate+real(daynew-1,WP)+timenew/86400._WP-dt/86400._WP/2._WP
+!      rdate = real(julday(yearnew,1,1),WP)
+!      rdate = rdate+real(daynew-1,WP)+timenew/86400._WP-dt/86400._WP/2._WP
       do_rotation=.false.
 
       do fld_idx = 1, i_totfl
+         ! compute model rdate based on the calendar option of the forcing file 
+         ! so match up
+         rdate = real(julday(yearnew,1,1,sbc_flfi(1)%calendar),WP)
+         rdate = rdate+real(daynew-1,WP)+timenew/86400._WP-dt/86400._WP/2._WP
+         
          nc_time  =>sbc_flfi(fld_idx)%nc_time
          t_indx_p1=>sbc_flfi(fld_idx)%t_indx_p1
          t_indx   =>sbc_flfi(fld_idx)%t_indx
@@ -1190,11 +1225,13 @@ CONTAINS
 
    END SUBROUTINE err_call
 
-   FUNCTION julday(yyyy,mm,dd)
+!   FUNCTION julday(yyyy,mm,dd)
+   FUNCTION julday(yyyy,mm,dd,calendar)
 
    IMPLICIT NONE
       integer, INTENT(IN) :: mm, dd, yyyy
       integer             :: julday
+      character(len=*)    :: calendar
       ! In this routine julday returns the Julian Day Number that begins at noon of the calendar     
       !    date specified by month mm, day dd , and year yyyy, all integer variables. Positive year
       !    signifies A.D.; negative, B.C. Remember that the year after 1 B.C. was 1 A.D. (from Num. Rec.)
@@ -1205,7 +1242,11 @@ CONTAINS
          julday=0
          return
       end if
-      if (include_fleapyear) then
+!      if (include_fleapyear) then
+         if ((trim(calendar).eq.'julian')    .or. &
+                 (trim(calendar).eq.'gregorian') .or. &
+                 (trim(calendar).eq.'proleptic_gregorian') .or. &
+                 (trim(calendar).eq.'standard')) then
          jy = yyyy
          if (jy == 0) STOP 'julday: there is no year zero'
          if (jy < 0) jy=jy+1
@@ -1227,20 +1268,26 @@ CONTAINS
    END FUNCTION julday
 
 
-   SUBROUTINE calendar_date(julian,yyyy,mm,dd)
+   !SUBROUTINE calendar_date(julian,yyyy,mm,dd)
+   SUBROUTINE calendar_date(julian,yyyy,mm,dd, calendar)
 
 !  Converts a Julian day to a calendar date (year, month and day). Numerical Recipes
    IMPLICIT NONE
 !
       integer,intent(in)  :: julian
       integer,intent(out) :: yyyy,mm,dd
-
+      character(len=*)    :: calendar
+      
       integer, parameter :: IGREG=2299161
       integer            :: ja,jb,jc,jd,je
       real(wp)           :: x
       !
       !-----------------------------------------------------------------------
-      if (include_fleapyear) then
+!      if (include_fleapyear) then
+         if ((trim(calendar).eq.'julian')    .or. &
+                 (trim(calendar).eq.'gregorian') .or. &
+                 (trim(calendar).eq.'proleptic_gregorian') .or. &
+                 (trim(calendar).eq.'standard')) then
          if (julian >= IGREG ) then
             x = ((julian-1867216)-0.25_WP)/36524.25_WP
             ja = julian+1+int(x)-int(0.25*x)
